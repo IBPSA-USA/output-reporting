@@ -1,0 +1,6 @@
+title: "Output Reporting Data Model"
+author: "IBPSA-USA"
+description: "A standardized modern data model for characterizing output reporting data"
+colors:
+  primary: grey
+  accent: red
