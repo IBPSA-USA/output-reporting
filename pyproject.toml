@@ -17,4 +17,4 @@ build-backend = "hatchling.build"
 packages = ["output-reporting"]
 
 [tool.uv.sources]
-lattice = { git = "https://github.com/bigladder/lattice.git", branch = "main" }
+lattice = { git = "https://github.com/bigladder/lattice.git", branch = "additional-232-enhancements" }
