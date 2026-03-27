@@ -4,9 +4,123 @@
     "schema_name": "OUTPUT_REPORTING",
     "schema_version": "0.1.0",
     "author": "Big Ladder Software",
-    "id": "a7239fe1-24ea-473f-b40b-27b0a03e9bdf",
+    "id": "e3f23aa8-3b90-4bf9-8f05-2a8ade7059a5",
     "description": "Initial example",
-    "time_of_creation": "2026-02-27T18:52Z",
+    "time_of_creation": "2026-03-14T15:33Z",
     "version": "1.0.0"
-  }
+  },
+  "time_intervals": [
+    {
+      "id": "Hourly",
+      "starting_time": "2026-01-01T00:00Z",
+      "regular_interval": 3600.0
+    }
+  ],
+  "energy_sources": [
+    {
+      "name": "Electricity",
+      "direction": "IMPORTED",
+      "end_uses": [
+        {
+          "name": "Ventilation",
+          "consumption": {
+            "display_name": "Consumption",
+            "units": "kWh",
+            "value_type": "SUM",
+            "value_time_intervals": "Hourly",
+            "values": [
+              0.0,
+              1234.0,
+              8.0
+            ]
+          }
+        },
+        {
+          "name": "Plug Loads",
+          "subcategories": [
+            {
+              "name": "Plug Loads | Cooking",
+              "consumption": {
+                "display_name": "Consumption",
+                "units": "kWh",
+                "value_type": "SUM",
+                "value_time_intervals": "Hourly",
+                "values": [
+                  0.0,
+                  0.0,
+                  0.0
+                ]
+              }
+            },
+            {
+              "name": "Plug Loads | Refrigeration",
+              "consumption": {
+                "display_name": "Consumption",
+                "units": "kWh",
+                "value_type": "SUM",
+                "value_time_intervals": "Hourly",
+                "values": [
+                  0.0,
+                  0.0,
+                  0.0
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Lighting",
+          "subcategories": [
+            {
+              "name": "Lighting | Exterior",
+              "consumption": {
+                "display_name": "Consumption",
+                "units": "kWh",
+                "value_type": "SUM",
+                "value_time_intervals": "Hourly",
+                "values": [
+                  0.0,
+                  0.0,
+                  0.0
+                ]
+              }
+            },
+            {
+              "name": "Lighting | Interior",
+              "subcategories": [
+                {
+                  "name": "Lighting | Interior | Task",
+                  "consumption": {
+                    "display_name": "Consumption",
+                    "units": "kWh",
+                    "value_type": "SUM",
+                    "value_time_intervals": "Hourly",
+                    "values": [
+                      0.0,
+                      0.0,
+                      0.0
+                    ]
+                  }
+                },
+                {
+                  "name": "Lighting | Interior | Process",
+                  "consumption": {
+                    "display_name": "Consumption",
+                    "units": "kWh",
+                    "value_type": "SUM",
+                    "value_time_intervals": "Hourly",
+                    "values": [
+                      0.0,
+                      0.0,
+                      0.0
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
 }
