@@ -121,6 +121,28 @@
           ]
         }
       ]
+    },
+    {
+      "name": "Biomass (Wood)",
+      "is_custom": true,
+      "direction": "IMPORTED",
+      "end_uses": [
+        {
+          "name": "Bonfire",
+          "is_custom": true,
+          "consumption": {
+            "display_name": "Bonfire",
+            "units": "kWh",
+            "value_type": "SUM",
+            "value_time_intervals": "Hourly",
+            "values": [
+              0.0,
+              0.0,
+              0.0
+            ]
+          }
+        }
+      ]
     }
   ]
 }
