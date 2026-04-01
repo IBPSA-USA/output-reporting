@@ -24,7 +24,7 @@
         {
           "name": "Ventilation",
           "consumption": {
-            "display_name": "Consumption",
+            "display_name": "Ventilation",
             "units": "kWh",
             "value_type": "SUM",
             "value_time_intervals": "Hourly",
@@ -39,9 +39,9 @@
           "name": "Plug Loads",
           "subcategories": [
             {
-              "name": "Plug Loads | Cooking",
+              "name": "Cooking",
               "consumption": {
-                "display_name": "Consumption",
+                "display_name": "Plug Loads | Cooking",
                 "units": "kWh",
                 "value_type": "SUM",
                 "value_time_intervals": "Hourly",
@@ -53,9 +53,9 @@
               }
             },
             {
-              "name": "Plug Loads | Refrigeration",
+              "name": "Refrigeration",
               "consumption": {
-                "display_name": "Consumption",
+                "display_name": "Plug Loads | Refrigeration",
                 "units": "kWh",
                 "value_type": "SUM",
                 "value_time_intervals": "Hourly",
@@ -72,9 +72,9 @@
           "name": "Lighting",
           "subcategories": [
             {
-              "name": "Lighting | Exterior",
+              "name": "Exterior",
               "consumption": {
-                "display_name": "Consumption",
+                "display_name": "Lighting | Exterior",
                 "units": "kWh",
                 "value_type": "SUM",
                 "value_time_intervals": "Hourly",
@@ -86,12 +86,12 @@
               }
             },
             {
-              "name": "Lighting | Interior",
+              "name": "Interior",
               "subcategories": [
                 {
-                  "name": "Lighting | Interior | Task",
+                  "name": "Task",
                   "consumption": {
-                    "display_name": "Consumption",
+                    "display_name": "Lighting | Interior | Task",
                     "units": "kWh",
                     "value_type": "SUM",
                     "value_time_intervals": "Hourly",
@@ -103,9 +103,9 @@
                   }
                 },
                 {
-                  "name": "Lighting | Interior | Process",
+                  "name": "Process",
                   "consumption": {
-                    "display_name": "Consumption",
+                    "display_name": "Lighting | Interior | Process",
                     "units": "kWh",
                     "value_type": "SUM",
                     "value_time_intervals": "Hourly",
