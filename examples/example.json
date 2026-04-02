@@ -90,7 +90,7 @@
               "subcategories": [
                 {
                   "name": "Task",
-                  "is_regulated": false,
+                  "is_unregulated": true,
                   "consumption": {
                     "display_name": "Lighting | Interior | Task",
                     "units": "kWh",
@@ -105,7 +105,7 @@
                 },
                 {
                   "name": "Process",
-                  "is_regulated": true,
+                  "is_unregulated": false,
                   "consumption": {
                     "display_name": "Lighting | Interior | Process",
                     "units": "kWh",
@@ -132,7 +132,7 @@
         {
           "name": "Bonfire",
           "is_custom": true,
-          "is_regulated": false,
+          "is_unregulated": true,
           "consumption": {
             "display_name": "Bonfire",
             "units": "kWh",
