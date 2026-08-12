@@ -6,3 +6,4 @@ build/
 __pycache__/
 .lattice/
 .venv/
+docs/end_uses_notes.md
