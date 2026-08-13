@@ -24,9 +24,9 @@
         {
           "name": "Ventilation",
           "consumption": {
-            "display_name": "Ventilation",
+            "name": "Ventilation",
             "units": "kWh",
-            "value_type": "SUM",
+            "time_series_type": "SUM",
             "value_time_intervals": "Hourly",
             "values": [
               0.0,
@@ -41,9 +41,9 @@
             {
               "name": "Cooking",
               "consumption": {
-                "display_name": "Plug Loads | Cooking",
+                "name": "Plug Loads | Cooking",
                 "units": "kWh",
-                "value_type": "SUM",
+                "time_series_type": "SUM",
                 "value_time_intervals": "Hourly",
                 "values": [
                   0.0,
@@ -55,9 +55,9 @@
             {
               "name": "Refrigeration",
               "consumption": {
-                "display_name": "Plug Loads | Refrigeration",
+                "name": "Plug Loads | Refrigeration",
                 "units": "kWh",
-                "value_type": "SUM",
+                "time_series_type": "SUM",
                 "value_time_intervals": "Hourly",
                 "values": [
                   0.0,
@@ -74,9 +74,9 @@
             {
               "name": "Exterior",
               "consumption": {
-                "display_name": "Lighting | Exterior",
+                "name": "Lighting | Exterior",
                 "units": "kWh",
-                "value_type": "SUM",
+                "time_series_type": "SUM",
                 "value_time_intervals": "Hourly",
                 "values": [
                   0.0,
@@ -92,9 +92,9 @@
                   "name": "Task",
                   "is_unregulated": true,
                   "consumption": {
-                    "display_name": "Lighting | Interior | Task",
+                    "name": "Lighting | Interior | Task",
                     "units": "kWh",
-                    "value_type": "SUM",
+                    "time_series_type": "SUM",
                     "value_time_intervals": "Hourly",
                     "values": [
                       0.0,
@@ -107,9 +107,9 @@
                   "name": "Process",
                   "is_unregulated": false,
                   "consumption": {
-                    "display_name": "Lighting | Interior | Process",
+                    "name": "Lighting | Interior | Process",
                     "units": "kWh",
-                    "value_type": "SUM",
+                    "time_series_type": "SUM",
                     "value_time_intervals": "Hourly",
                     "values": [
                       0.0,
@@ -134,9 +134,9 @@
           "is_custom": true,
           "is_unregulated": true,
           "consumption": {
-            "display_name": "Bonfire",
+            "name": "Bonfire",
             "units": "kWh",
-            "value_type": "SUM",
+            "time_series_type": "SUM",
             "value_time_intervals": "Hourly",
             "values": [
               0.0,

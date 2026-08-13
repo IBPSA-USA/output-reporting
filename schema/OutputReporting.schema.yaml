@@ -11,6 +11,182 @@ SchemaType:
     OUTPUT_REPORTING:
       Description: "Output reporting"
 
+TimeSeriesType:
+  Object Type: "Enumeration"
+  Enumerators:
+    INSTANTANEOUS:
+      Description: "Instantaneous"
+      Notes: "Values reflect the instant of the current timestamp in the corresponding TimeIntervals data group"
+    AVERAGE:
+      Description: "Average"
+      Notes: "Values reflect the average between the previous timestamp and the current timestamp in the corresponding TimeIntervals data group"
+    SUM:
+      Description: "Sum"
+      Notes: "Values reflect the integrated sum between the previous timestamp and the current timestamp in the corresponding TimeIntervals data group"
+    CUMULATIVE:
+      Description: "Cumulative"
+      Notes: "Values reflect the cumulative sum between the starting timestamp and the current timestamp in the corresponding TimeIntervals data group"
+
+EnergySourceDirection:
+  Object Type: "Enumeration"
+  Enumerators:
+    IMPORTED:
+      Description: "Energy imported from an off-site source (e.g., utility grid, delivered fuel)"
+    EXPORTED:
+      Description: "Energy exported off-site (e.g., surplus on-site generation sold back to the grid)"
+    ON_SITE_PRODUCTION:
+      Description: "Energy produced on-site (e.g., on-site renewable generation, combined heat and power)"
+
+TimeIntervals:
+  Object Type: "Data Group"
+  Data Elements:
+    id:
+      Description: "Reference identification"
+      Type: String
+      Required: True
+      ID: True
+    starting_time:
+      Description: "Timestamp indicating the beginning of the data"
+      Type: Timestamp
+      Required: True
+      Notes: 'Used to determine the "previous" timestamp for the first value in a time series where the time series type is not `INSTANTANEOUS`'
+    regular_interval:
+      Description: "Duration of regular interval"
+      Type: Numeric
+      Units: s
+      Constraints: ">0"
+      Required: "if !timestamps"
+    timestamps:
+      Description: "Array of timestamps"
+      Type: "Array(Timestamp)"
+      Constraints:
+        - "[1..]"
+      Required: "if !regular_interval"
+    labels:
+      Description: "Informal labels describing each time interval"
+      Type: "Array(String)"
+      Constraints:
+        - "[1..]"
+    notes:
+      Description: "Notes about each time interval"
+      Type: "Array(String)"
+      Constraints:
+        - "[1..]"
+
+TimeSeries:
+  Object Type: "Data Group"
+  Data Elements:
+    name:
+      Description: "Name of this time series"
+      Type: String
+      Required: True
+    units:
+      Description: "Units of measurement for this time series"
+      Type: String
+      Required: True
+    time_series_type:
+      Description: "Type of value"
+      Type: <TimeSeriesType>
+      Required: True
+    value_time_intervals:
+      Description: "Reference to the TimeIntervals data group associated with this time series"
+      Type: ":TimeIntervals:"
+      Required: True
+    values:
+      Description: "Time series data values"
+      Type: "Array(Numeric)"
+      Units: "-"
+      Constraints:
+        - "[1..]"
+      Required: True
+
+# Structural shape only, for use as the value of the Canonical End Uses custom attribute --
+# not a data-bearing group in its own right.
+CanonicalEndUse:
+  Object Type: "Data Group"
+  Data Elements:
+    name:
+      Description: "Name of this canonical end use or end-use subcategory"
+      Type: String
+      Required: True
+    subcategories:
+      Description: "Canonical subcategories nested under this end use"
+      Type: "Array(Group(CanonicalEndUse))"
+
+EndUse:
+  Object Type: "Data Group"
+  Data Elements:
+    name:
+      Description: "Name of this end use or end-use subcategory"
+      Type: String
+      Required: True
+      Notes:
+        - "See the project's standardized end-use category documentation for recommended names"
+        - "Set `is_custom` when using a name outside that list"
+    is_custom:
+      Description: "Indicates this end use falls outside the standardized categories"
+      Type: Boolean
+      Notes: "Defaults to false when absent."
+    is_unregulated:
+      Description: "Indicates this end use's energy is not subject to code-mandated efficiency/power allowances (e.g., process loads)"
+      Type: Boolean
+      Notes: "Defaults to false when absent."
+    subcategories:
+      Description: "Further breakdown of this end use's energy consumption"
+      Type: "Array(Group(EndUse))"
+      Constraints:
+        - "[1..]"
+      Notes: "Recursive; supports any number of nesting levels."
+    consumption:
+      Description: "Energy consumption for this end use or subcategory"
+      Type: "Group(TimeSeries)"
+      Constraints:
+        - time_series_type=SUM
+
+EnergySource:
+  Object Type: "Data Group"
+  Custom Attributes: ["Canonical End Uses"]
+  Data Elements:
+    name:
+      Description: "Name of this energy source"
+      Type: String
+      Required: True
+      Notes: "A standard energy source enumeration has not yet been established for this schema; `name` is free text for all energy sources until that work is complete."
+    is_custom:
+      Description: "Indicates this energy source falls outside any standard energy source list"
+      Type: Boolean
+      Notes: "Defaults to false when absent."
+    direction:
+      Description: "Direction of energy flow relative to the site"
+      Type: <EnergySourceDirection>
+      Required: True
+    end_uses:
+      Description: "Array of end uses served by this energy source"
+      Type: "Array(Group(EndUse))"
+      Constraints:
+        - "[1..]"
+      Required: True
+      Canonical End Uses:
+        - name: "Lighting"
+          subcategories:
+            - name: "Interior Lighting"
+            - name: "Exterior Lighting"
+        - name: "Space Heating"
+          subcategories:
+            - name: "Heat Pump Supplementary"
+        - name: "Space Cooling"
+          subcategories:
+            - name: "Heat Rejection"
+        - name: "Water Heating"
+        - name: "Miscellaneous"
+          subcategories:
+            - name: "Cooking"
+            - name: "Refrigeration"
+            - name: "Elevators and Escalators"
+        - name: "Fans"
+        - name: "Humidification"
+        - name: "Pumps"
+
 OutputReporting:
   Object Type: "Data Group"
   Data Elements:
@@ -19,3 +195,15 @@ OutputReporting:
       Type: "Group(Metadata)"
       Constraints: schema_name="OUTPUT_REPORTING"
       Required: True
+    time_intervals:
+      Description: "Array of TimeIntervals data groups whose ids may be referenced within TimeSeries data groups"
+      Type: "Array(Group(TimeIntervals))"
+      Required: True
+      Constraints:
+        - "[1..]"
+    energy_sources:
+      Description: "Array of energy sources reported for this project"
+      Type: "Array(Group(EnergySource))"
+      Required: True
+      Constraints:
+        - "[1..]"
