@@ -121,10 +121,10 @@ EndUse:
       Type: String
       Required: True
       Notes:
-        - "See the project's standardized end-use category documentation for recommended names"
+        - "See the canonical end-use categories for recommended names"
         - "Set `is_custom` when using a name outside that list"
     is_custom:
-      Description: "Indicates this end use falls outside the standardized categories"
+      Description: "Indicates this end use falls outside the canonical categories"
       Type: Boolean
       Notes: "Defaults to false when absent."
     is_unregulated:

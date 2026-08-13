@@ -2,16 +2,208 @@
 
 ## Scope
 
+This document defines the content and structure of a data model for exchanging whole-building
+energy performance results produced by building performance simulation software: energy
+consumption broken out by canonical end-use category and by energy source, whether that
+consumption is regulated or unregulated by code, on-site energy production and export, and the
+time-series structure used to report it.
+
+This is a special case of the general data model for building data exchange published in
+**ANSI/ASHRAE/IBPSA Standard 232**; where this document does not otherwise specify a structure,
+convention, or data type, Standard 232 governs.
+
 ### Applicability
+
+This data model is intended for the exchange of energy performance output between building
+performance simulation software and downstream consumers of that output, particularly:
+
+- Automated code-compliance review and QA/QC software, where a simulation tool exports a
+  conformant file and reviewing software ingests it directly, without manual re-entry or
+  bespoke per-tool parsing (see Application Rules for guidance specific to this use).
+- Assembly of a single reporting file from multiple specialized building performance
+  simulation tools (e.g., separate engines for whole-building loads/HVAC, daylighting, and
+  on-site generation), using the `is_custom` end-use and energy-source mechanism for
+  breakdowns that do not map onto the canonical categories (see Publishing Rules).
+- General benchmarking, reporting, and visualization of simulated building energy performance.
 
 ### Exclusions
 
+This document does not cover:
+
+- Descriptions of the building or its systems (e.g., geometry, envelope constructions,
+  equipment schedules, HVAC configuration) used to produce the reported results -- this data
+  model reports simulation *output* only.
+- A standardized enumeration of energy source names; `EnergySource.name` remains free text
+  until that enumeration is established (see Data Model).
+- Verification that the `consumption` values reported across multiple `EndUse` or
+  `EnergySource` entries in the same document are non-overlapping, or that they sum to a
+  correct building total. Placement of end-use energy (e.g., fan energy reported flat versus
+  nested under Space Heating or Space Cooling) is a modeling judgment left to the data
+  publisher; see Verification Rules and Publishing Rules.
+
 ## Data Model
+
+A conformant `OutputReporting` document is a single object with three top-level members:
+`metadata` (the Standard 232 common `Metadata` data group, constrained to
+`schema_name = OUTPUT_REPORTING`), `time_intervals` (one or more `TimeIntervals` data groups,
+each identified by an `id` that `TimeSeries` elsewhere in the document reference), and
+`energy_sources` (one or more `EnergySource` entries -- the actual reported results).
+
+Each `EnergySource` (e.g., electricity, natural gas) carries a `direction` (`IMPORTED`,
+`EXPORTED`, or `ON_SITE_PRODUCTION`) and an array of `EndUse` entries describing what consumed,
+produced, or exported that energy. `EndUse` is recursive: any entry may carry `subcategories`,
+an array of further `EndUse` entries, to any depth, alongside its own `consumption` (a
+`TimeSeries` whose `time_series_type` is constrained to `SUM`, referencing one of the
+document's `TimeIntervals` by `id`). An `EndUse` with subcategories may or may not also report
+its own `consumption` directly, depending on whether the reported total is already implicit in
+the sum of its subcategories.
+
+### Canonical End-Use Categories
+
+An `EndUse.name` should be one of the canonical categories below unless `is_custom` is set to
+`true`. These categories and their nesting are also captured in machine-readable form as the
+`Canonical End Uses` custom attribute on `EnergySource.end_uses`, in the Data Groups tables
+below.
+
+#### Lighting
+
+Energy used by luminaires. Always reported through one of its two subcategories, never as a
+bare `Lighting` value with its own consumption.
+
+- **Interior Lighting** -- Energy used by luminaires within enclosed spaces for the purpose of
+  illuminance, covering task and process lighting, dwelling- and common-area lighting,
+  plug-in and hardwired fixtures, all lamp types, exit and emergency lighting, and
+  decorative, public-area, and health/safety lighting.
+- **Exterior Lighting** -- Energy used by luminaires that illuminate the building facade,
+  entrances, walkways, parking lots, and landscaping.
+
+#### Space Heating
+
+Energy used by mechanical equipment (e.g., boilers, furnaces, heat pumps, radiant systems) to
+add sensible heat to the building to maintain comfort or process requirements. For heat pumps,
+this includes the outdoor fan's energy when its power is included in the rated efficiency.
+
+- **Heat Pump Supplementary** -- Energy used by auxiliary or backup heating equipment (e.g.,
+  electric resistance coils) that operates when a heat pump cannot meet the space heating
+  load alone, or during defrost cycles.
+- **Fans** -- Fan energy attributable to this system's heating operation (e.g., a furnace's
+  or heat pump's supply fan), when attributing it to Space Heating better serves the report
+  than the flat, top-level Fans category. See Fans below for the full definition and the
+  placement convention governing whether fan energy is nested here or reported flat.
+
+#### Space Cooling
+
+Energy used by mechanical equipment (e.g., chillers, DX compressors) to remove sensible
+and/or latent heat from the building to maintain comfort or process requirements. For DX
+equipment, this includes the outdoor condenser fan's energy when its power is included in the
+rated efficiency.
+
+- **Heat Rejection** -- Energy used by central plant equipment (e.g., cooling towers, fluid
+  coolers, dry coolers) to reject heat from the building's water-cooled systems to the
+  outdoor environment. Excludes condenser fans integral to packaged or split DX equipment,
+  whose energy stays under Space Cooling itself.
+- **Fans** -- Fan energy attributable to this system's cooling operation (e.g., a packaged DX
+  unit's supply fan), when attributing it to Space Cooling better serves the report than the
+  flat, top-level Fans category. See Fans below.
+
+#### Water Heating
+
+Energy used to heat water for domestic, commercial, or industrial use (e.g., lavatories,
+showers, process equipment), distinct from space heating. Also known as Service Water Heating
+(SWH) or Domestic Hot Water (DHW); **Water Heating** is the name adopted here.
+
+#### Miscellaneous
+
+Energy used by general equipment plugged into standard electrical outlets, as well as general
+hard-wired equipment not explicitly categorized in another end use.
+
+- **Cooking** -- Energy used by commercial or residential kitchen equipment for food
+  preparation that involves heating (e.g., ovens, ranges, fryers, steamers). Excludes kitchen
+  exhaust fans and non-heating food processing equipment.
+- **Refrigeration** -- Energy used by equipment designed to cool and store perishable goods
+  below room temperature (e.g., walk-in coolers, freezers, display cases).
+- **Elevators and Escalators** -- Energy used by motors, controls, and associated machinery
+  for the mechanical conveyance of people and goods, including elevators, escalators, and
+  moving walkways.
+
+#### Fans
+
+Electrical energy used by motors driving air-moving devices within the HVAC system (e.g.,
+supply, return, and relief fans), as well as process or dedicated exhaust fans (e.g., kitchen
+hoods, garage, or laboratory exhaust), for the purpose of circulating or exhausting air.
+
+Fan energy may be reported either as this flat top-level category (the form illustrated in
+the `Canonical End Uses` custom attribute below) or nested as a subcategory under Space
+Heating or Space Cooling, when attributing fan energy to the system it serves is preferred.
+Both are valid; see Publishing Rules and Application Rules for the convention that governs
+how publishers should document, and applications should interpret, which slice of the
+building's fan energy a given `Fans` entry covers.
+
+#### Humidification
+
+Energy used by mechanical equipment to add moisture to the building air to maintain a minimum
+relative humidity setpoint.
+
+#### Pumps
+
+Electrical energy used by motors driving fluid-moving devices within the HVAC or service
+water systems (e.g., chilled water, hot water, condenser water, recirculation, or process
+water pumps).
 
 {{ add_data_model('OutputReporting', base_level=3) }}
 
 ## Verification Rules
 
+The following rules are in addition to the value ranges and enumerations already enforced
+through each data element's `Constraints` attribute in the Data Model above.
+
+- The number of values in a `TimeSeries.values` array shall equal the number of intervals
+  defined by the `TimeIntervals` data group referenced by that time series'
+  `value_time_intervals` (i.e., the length of `timestamps` if given, or the number of regular
+  intervals implied by `regular_interval` and the series' starting and ending times).
+- Unless `EndUse.is_custom` is `true`, `EndUse.name` shall match one of the canonical end-use
+  category or subcategory names given in the Data Model above, at a nesting position
+  consistent with that category's documented parent (e.g., `Heat Pump Supplementary` only
+  within a `Space Heating` entry's `subcategories`).
+
+Informative Note: This standard does not include a rule verifying that `consumption` values
+reported by two or more `EndUse` or `EnergySource` entries in the same document are
+non-overlapping (e.g., that flat and system-nested `Fans` entries do not double-count the same
+fan energy), nor that end-use totals sum to a correct building total. This is a documented
+convention for data publishers and applications to follow -- see Publishing Rules and
+Application Rules -- and not a schema-verifiable guarantee.
+
 ## Publishing Rules
 
+- Use one of the canonical end-use category names given in the Data Model above for
+  `EndUse.name` whenever a reported end use corresponds to one of those categories; set
+  `is_custom` to `true` and choose a descriptive `name` for any end use outside that list
+  (e.g., a tool-specific process load).
+- When reporting `Fans` energy -- whether as the flat top-level category or nested under
+  `Space Heating` or `Space Cooling` -- include a `notes` value describing what slice of the
+  building's fan energy that entry covers (e.g., "supply fan energy for the packaged rooftop
+  DX units" or "general exhaust and ventilation fans not attributed to a specific system").
+  Because placement is a modeling judgment call and the schema does not verify non-overlap
+  (see Verification Rules), this is the only way a reader can determine whether two `Fans`
+  entries in the same document double-count the same energy.
+- When assembling a single document from the output of more than one building performance
+  simulation tool, normalize each tool's results onto a common `TimeIntervals` entry where
+  their native timesteps agree, or publish a separate `TimeIntervals` entry per native
+  timestep and reference the correct one from each `TimeSeries`. Use `is_custom` end uses for
+  breakdowns specific to a single tool that do not map onto the canonical categories.
+- `EnergySource.name` is free text until a standardized energy source enumeration is
+  established for this schema; publishers should adopt that enumeration once available.
+
 ## Application Rules
+
+- Do not assume that two `EndUse` entries in the same document -- e.g., a flat `Fans` entry
+  and a `Fans` entry nested under `Space Heating` -- report non-overlapping energy. Read each
+  entry's `notes` (see Publishing Rules) to determine what it covers before aggregating
+  `consumption` values across a document.
+- Treat an absent `is_custom` or `is_unregulated` value as `false`, consistent with each data
+  element's documented default.
+- Applications performing code-compliance review should treat `EndUse` entries with
+  `is_unregulated` set to `true` as outside the scope of code-mandated efficiency or power
+  allowance checks.
+- Resolve a `TimeSeries.value_time_intervals` reference against the `id` of an entry in the
+  `time_intervals` array of the enclosing `OutputReporting` document.
