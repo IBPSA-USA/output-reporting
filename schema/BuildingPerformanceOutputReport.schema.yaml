@@ -168,9 +168,11 @@ EnergySource:
         - name: "Space Heating"
           subcategories:
             - name: "Heat Pump Supplementary"
+            - name: "Fans"
         - name: "Space Cooling"
           subcategories:
             - name: "Heat Rejection"
+            - name: "Fans"
         - name: "Water Heating"
         - name: "Miscellaneous"
           subcategories:
