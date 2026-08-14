@@ -197,6 +197,14 @@ than left as apparent duplicates.
 - **Ceiling fans; process vs. IAQ vs. kitchen vs. parking-garage fans.** Raised under Fans;
   unclear whether these warrant their own subcategories or stay lumped into the flat Fans
   category.
+- **Generation: does on-site renewable electricity (or other energy) production need its own
+  end-use category?** An `EnergySource` entry with `direction = ON_SITE_PRODUCTION` (e.g.,
+  on-site solar PV or wind) is required to report `end_uses`, but production doesn't have a
+  natural "what is this used for" answer the way consumption does. Not yet addressed by any
+  structure considered so far; related to, but distinct from, "Fossil On-site Generation"
+  below (see [Possibly EnergySource, not EndUse](#possibly-energysource-not-enduse)), which
+  raised a similar generation question but for fuel-consuming (not renewable) on-site
+  generation.
 
 ## Other End Uses to Consider for the First Schema Draft
 
