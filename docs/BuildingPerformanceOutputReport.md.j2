@@ -1,5 +1,51 @@
 # Building Performance Output Report Specification
 
+## Identification
+
+| Element        | Value                                              |
+| --------------- | --------------------------------------------------- |
+| Schema Name     | `Building Performance Output Report`                |
+| Schema Author   | `IBPSA-USA Building Data Exchange Committee`         |
+| Schema URL      | `https://ibpsa-usa.github.io/output-reporting/`      |
+
+## Version History
+
+See [GitHub releases](https://github.com/IBPSA-USA/output-reporting/releases) for this
+schema's version history.
+
+## Use Case
+
+### User Types
+
+Building Owners
+:   The parties who own or operate the building a report describes.
+
+Authorities Having Jurisdiction (AHJs)
+:   The regulatory bodies responsible for verifying code compliance for a building.
+
+Software Developers
+:   The engineers who build the building performance simulation, reporting, and review
+    software that produces and consumes conformant documents.
+
+Building Performance Modelers
+:   The practitioners who run building performance simulations to produce the results a
+    conformant document reports.
+
+### Simulation Software to AHJ Reporting/Review Software
+
+The data model's core use is a software-to-software pipeline: a building performance
+simulation tool exports a `BuildingPerformanceOutputReport`-conformant file, and a downstream
+application -- most notably an AHJ's code-compliance review software -- ingests it to perform
+automated QA/QC and compliance checks, without manual re-entry or bespoke per-tool parsing.
+
+### Assembling a Custom Report from Multiple Software Tools
+
+A secondary use case merges output from more than one simulation tool into a single
+conformant file, when a sophisticated model (e.g., a complex mixed-use building or
+design-assist study) isn't produced by one engine end to end, and a separate `TimeIntervals`
+entry is needed per native timestep where the merged tools disagree on granularity (see
+Publishing Rules for the `is_custom` mechanism used to absorb tool-specific breakdowns).
+
 ## Scope
 
 This document defines the content and structure of a data model for exchanging whole-building
