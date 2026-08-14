@@ -383,7 +383,7 @@ wheels = [
 [[package]]
 name = "lattice"
 version = "0.0.0"
-source = { git = "https://github.com/bigladder/lattice.git?branch=updates-for-output-reporting#974bca077710d93be944fcd38eaea268cb47001a" }
+source = { git = "https://github.com/bigladder/lattice.git?branch=updates-for-output-reporting#07df4846688143c7524784c57d2ce3945e3f048a" }
 dependencies = [
     { name = "atheneum-forge" },
     { name = "casefy" },
@@ -422,13 +422,10 @@ wheels = [
 
 [[package]]
 name = "markdown-grid-tables"
-version = "0.4.0"
-source = { registry = "https://pypi.org/simple" }
+version = "0.6.1.dev4+g193493127"
+source = { git = "https://github.com/bigladder/markdown-grid-tables.git?branch=fix-def-list-and-preprocessing#193493127920b02c0715e5eca16c260d580bc8c6" }
 dependencies = [
     { name = "markdown" },
-]
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/92/13/bd9128c8c304c072a6c66becbfeb0b379fd9e590a6b2e0a78a78d27c8704/markdown_grid_tables-0.4.0-py3-none-any.whl", hash = "sha256:6f3422b854e8dbfe25a4e35e337df32f1bd901c420d4d6f132886334709939f5", size = 20960, upload-time = "2025-01-05T01:20:07.058Z" },
 ]
 
 [[package]]
