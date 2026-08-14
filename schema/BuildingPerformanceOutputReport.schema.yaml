@@ -94,8 +94,22 @@ TimeSeries:
         - "[1..]"
       Required: True
 
-# Structural shape only, for use as the value of a "Canonical ..." custom attribute (e.g.
-# Canonical End Uses, Canonical Energy Sources) -- not a data-bearing group in its own right.
+CanonicalEndUses:
+  Object Type: "Custom Attribute"
+  Type: "Array(Group(CanonicalCategory))"
+  Display Name: "Canonical End Uses"
+  Description: "The canonical end-use category names and their standard nesting, for the end uses served by an energy source."
+  Applies To: ["Array(Group(EndUse))"]
+
+CanonicalEnergySources:
+  Object Type: "Custom Attribute"
+  Type: "Array(Group(CanonicalCategory))"
+  Display Name: "Canonical Energy Sources"
+  Description: "The canonical energy source names reported for a project."
+  Applies To: ["Array(Group(EnergySource))"]
+
+# Structural shape only, for use as the value of a "Canonical ..." custom attribute above --
+# not a data-bearing group in its own right.
 CanonicalCategory:
   Object Type: "Data Group"
   Data Elements:
