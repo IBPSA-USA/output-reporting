@@ -383,7 +383,7 @@ wheels = [
 [[package]]
 name = "lattice"
 version = "0.0.0"
-source = { git = "https://github.com/bigladder/lattice.git?branch=updates-for-output-reporting#07df4846688143c7524784c57d2ce3945e3f048a" }
+source = { git = "https://github.com/bigladder/lattice.git?branch=updates-for-output-reporting#8445454975b693e1f928ad7c8bc5a2f85883e2c6" }
 dependencies = [
     { name = "atheneum-forge" },
     { name = "casefy" },
