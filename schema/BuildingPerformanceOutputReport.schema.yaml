@@ -94,18 +94,18 @@ TimeSeries:
         - "[1..]"
       Required: True
 
-# Structural shape only, for use as the value of the Canonical End Uses custom attribute --
-# not a data-bearing group in its own right.
-CanonicalEndUse:
+# Structural shape only, for use as the value of a "Canonical ..." custom attribute (e.g.
+# Canonical End Uses, Canonical Energy Sources) -- not a data-bearing group in its own right.
+CanonicalCategory:
   Object Type: "Data Group"
   Data Elements:
     name:
-      Description: "Name of this canonical end use or end-use subcategory"
+      Description: "Name of this canonical category or subcategory"
       Type: String
       Required: True
     subcategories:
-      Description: "Canonical subcategories nested under this end use"
-      Type: "Array(Group(CanonicalEndUse))"
+      Description: "Canonical subcategories nested under this category"
+      Type: "Array(Group(CanonicalCategory))"
 
 EndUse:
   Object Type: "Data Group"
@@ -145,9 +145,11 @@ EnergySource:
       Description: "Name of this energy source"
       Type: String
       Required: True
-      Notes: "A standard energy source enumeration has not yet been established for this schema; `name` is free text for all energy sources until that work is complete."
+      Notes:
+        - "See the canonical energy sources for recommended names"
+        - "Set `is_custom` when using a name outside that list"
     is_custom:
-      Description: "Indicates this energy source falls outside any standard energy source list"
+      Description: "Indicates this energy source falls outside the canonical energy sources"
       Type: Boolean
       Notes: "Defaults to false when absent."
     direction:
@@ -185,6 +187,7 @@ EnergySource:
 
 BuildingPerformanceOutputReport:
   Object Type: "Data Group"
+  Custom Attributes: ["Canonical Energy Sources"]
   Data Elements:
     metadata:
       Description: "Metadata"
@@ -203,3 +206,11 @@ BuildingPerformanceOutputReport:
       Required: True
       Constraints:
         - "[1..]"
+      Canonical Energy Sources:
+        - name: "Electricity"
+        - name: "Natural Gas"
+        - name: "Fuel Oil"
+        - name: "Propane"
+        - name: "Chilled Water"
+        - name: "Hot Water"
+        - name: "Steam"

@@ -79,8 +79,6 @@ This document does not cover:
 - Descriptions of the building or its systems (e.g., geometry, envelope constructions,
   equipment schedules, HVAC configuration) used to produce the reported results -- this data
   model reports simulation *output* only.
-- A standardized enumeration of energy source names; `EnergySource.name` remains free text
-  until that enumeration is established (see Data Model).
 - Verification that the `consumption` values reported across multiple `EndUse` or
   `EnergySource` entries in the same document are non-overlapping, or that they sum to a
   correct building total. Placement of end-use energy (e.g., fan energy reported flat versus
@@ -104,6 +102,24 @@ an array of further `EndUse` entries, to any depth, alongside its own `consumpti
 document's `TimeIntervals` by `id`). An `EndUse` with subcategories may or may not also report
 its own `consumption` directly, depending on whether the reported total is already implicit in
 the sum of its subcategories.
+
+### Canonical Energy Sources
+
+An `EnergySource.name` should be one of the canonical sources below unless `is_custom` is set
+to `true`. Each may be reported with any applicable `direction`; e.g., on-site photovoltaic
+generation is reported as `Electricity` with `direction = ON_SITE_PRODUCTION`, not as a
+separate source name.
+
+- **Electricity** -- Electric energy supplied to or from the building via the utility grid or
+  on-site generation or storage.
+- **Natural Gas** -- Gaseous fuel delivered via utility pipeline.
+- **Fuel Oil** -- Liquid petroleum-based fuel delivered and stored on-site.
+- **Propane** -- Liquefied petroleum gas delivered and stored on-site.
+- **Chilled Water** -- Cooling energy delivered as chilled water from a district or campus
+  cooling system.
+- **Hot Water** -- Heating energy delivered as hot water from a district or campus heating
+  system.
+- **Steam** -- Heating energy delivered as steam from a district or campus steam system.
 
 ### Canonical End-Use Categories
 
@@ -212,6 +228,8 @@ through each data element's `Constraints` attribute in the Data Model above.
   category or subcategory names given in the Data Model above, at a nesting position
   consistent with that category's documented parent (e.g., `Heat Pump Supplementary` only
   within a `Space Heating` entry's `subcategories`).
+- Unless `EnergySource.is_custom` is `true`, `EnergySource.name` shall match one of the
+  canonical energy source names given in the Data Model above.
 
 Informative Note: This standard does not include a rule verifying that `consumption` values
 reported by two or more `EndUse` or `EnergySource` entries in the same document are
@@ -238,8 +256,13 @@ Application Rules -- and not a schema-verifiable guarantee.
   their native timesteps agree, or publish a separate `TimeIntervals` entry per native
   timestep and reference the correct one from each `TimeSeries`. Use `is_custom` end uses for
   breakdowns specific to a single tool that do not map onto the canonical categories.
-- `EnergySource.name` is free text until a standardized energy source enumeration is
-  established for this schema; publishers should adopt that enumeration once available.
+- Use one of the canonical energy source names given in the Data Model above for
+  `EnergySource.name` whenever a reported energy source corresponds to one of those names;
+  set `is_custom` to `true` and choose a descriptive `name` for any energy source outside that
+  list (e.g., a tool-specific fuel type). Use `direction` to distinguish imported, exported,
+  and on-site-produced energy rather than encoding that distinction into the name (e.g.,
+  on-site photovoltaic generation is `Electricity` with `direction = ON_SITE_PRODUCTION`, not
+  a separate name).
 
 ## Application Rules
 
