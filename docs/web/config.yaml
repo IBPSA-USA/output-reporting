@@ -1,6 +1,6 @@
-title: "Output Reporting Data Model"
+title: "Building Performance Output Report Data Model"
 author: "IBPSA-USA"
-description: "A standardized modern data model for characterizing output reporting data"
+description: "A standardized modern data model for characterizing building performance output reports"
 colors:
   primary: grey
   accent: red

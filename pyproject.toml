@@ -1,7 +1,7 @@
 [project]
 name = "output-reporting"
 version = "0.1.0"
-description = "Output Reporting Data Model"
+description = "Building Performance Output Report Data Model"
 authors = [{ name = "IBPSA-USA" }]
 requires-python = ">=3.10"
 dependencies = ["lattice"]

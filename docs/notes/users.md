@@ -2,7 +2,7 @@
 
 ## Status
 
-This document characterizes who uses the Output Reporting schema and its eventual generated
+This document characterizes who uses the Building Performance Output Report schema and its eventual generated
 reports — their goals, what they read or produce, and what they need from the schema. It is a
 stub: the four user types below are placeholders to be fleshed out with working-group input.
 Treat any characterization here as provisional until expanded.
@@ -37,7 +37,7 @@ now; to be filled in alongside the user types.
 AHJ-side review/reporting software), AHJs (consuming the result for review)
 
 This is the core pipeline the schema exists to standardize: a building energy simulation
-tool exports an Output Reporting-conformant file directly from its own results, and an AHJ's
+tool exports a Building Performance Output Report-conformant file directly from its own results, and an AHJ's
 reporting/review software ingests that file to perform compliance review — automated QA/QC
 checks, code-compliance verification — without manual re-entry or bespoke per-tool parsing.
 Building Performance Modelers are upstream of this pipeline (they run the simulation that

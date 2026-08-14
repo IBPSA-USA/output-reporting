@@ -3,10 +3,11 @@
 ## Status
 
 This document defines the standardized whole-building energy end-use categories for the
-Output Reporting data model. It is a decisions-and-definitions record, written ahead of the
-formal schema (`schema/OutputReporting.schema.yaml` does not yet define an end-use
-enumeration or data group). Treat the canonical terms and definitions below as the source of
-truth to carry into the schema and into `examples/example.json` when that work happens.
+Building Performance Output Report data model. It is a decisions-and-definitions record,
+written ahead of the formal schema (`schema/BuildingPerformanceOutputReport.schema.yaml` did
+not yet define an end-use enumeration or data group at the time this was written). Treat the
+canonical terms and definitions below as the source of truth to carry into the schema and
+into `examples/example.json` when that work happens.
 
 The structure adopted here is one of several proposals the working group considered.
 

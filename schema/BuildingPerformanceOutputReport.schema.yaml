@@ -1,15 +1,9 @@
 Schema:
   Object Type: "Meta"
-  Title: "Output Reporting"
-  Description: "Schema for describing output reporting"
+  Title: "Building Performance Output Report"
+  Description: "Schema for describing building performance output reports"
   Version: "0.1.0"
-  Root Data Group: "OutputReporting"
-
-SchemaType:
-  Object Type: "Enumeration"
-  Enumerators:
-    OUTPUT_REPORTING:
-      Description: "Output reporting"
+  Root Data Group: "BuildingPerformanceOutputReport"
 
 TimeSeriesType:
   Object Type: "Enumeration"
@@ -187,13 +181,13 @@ EnergySource:
         - name: "Humidification"
         - name: "Pumps"
 
-OutputReporting:
+BuildingPerformanceOutputReport:
   Object Type: "Data Group"
   Data Elements:
     metadata:
       Description: "Metadata"
       Type: "Group(Metadata)"
-      Constraints: schema_name="OUTPUT_REPORTING"
+      Constraints: schema_name="Building Performance Output Report"
       Required: True
     time_intervals:
       Description: "Array of TimeIntervals data groups whose ids may be referenced within TimeSeries data groups"

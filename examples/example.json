@@ -1,7 +1,7 @@
 {
   "metadata": {
-    "schema_author": "IBPSA_BDE",
-    "schema_name": "OUTPUT_REPORTING",
+    "schema_author": "IBPSA-USA Building Data Exchange Committee",
+    "schema_name": "Building Performance Output Report",
     "schema_version": "0.1.0",
     "author": "Big Ladder Software",
     "id": "e3f23aa8-3b90-4bf9-8f05-2a8ade7059a5",

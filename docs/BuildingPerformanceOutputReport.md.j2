@@ -1,4 +1,4 @@
-# Output Reporting Model Specification
+# Building Performance Output Report Specification
 
 ## Scope
 
@@ -43,11 +43,12 @@ This document does not cover:
 
 ## Data Model
 
-A conformant `OutputReporting` document is a single object with three top-level members:
-`metadata` (the Standard 232 common `Metadata` data group, constrained to
-`schema_name = OUTPUT_REPORTING`), `time_intervals` (one or more `TimeIntervals` data groups,
-each identified by an `id` that `TimeSeries` elsewhere in the document reference), and
-`energy_sources` (one or more `EnergySource` entries -- the actual reported results).
+A conformant `BuildingPerformanceOutputReport` document is a single object with three
+top-level members: `metadata` (the Standard 232 common `Metadata` data group, constrained to
+`schema_name = "Building Performance Output Report"`), `time_intervals` (one or more
+`TimeIntervals` data groups, each identified by an `id` that `TimeSeries` elsewhere in the
+document reference), and `energy_sources` (one or more `EnergySource` entries -- the actual
+reported results).
 
 Each `EnergySource` (e.g., electricity, natural gas) carries a `direction` (`IMPORTED`,
 `EXPORTED`, or `ON_SITE_PRODUCTION`) and an array of `EndUse` entries describing what consumed,
@@ -150,7 +151,7 @@ Electrical energy used by motors driving fluid-moving devices within the HVAC or
 water systems (e.g., chilled water, hot water, condenser water, recirculation, or process
 water pumps).
 
-{{ add_data_model('OutputReporting', base_level=3) }}
+{{ add_data_model('BuildingPerformanceOutputReport', base_level=3) }}
 
 ## Verification Rules
 
@@ -206,4 +207,4 @@ Application Rules -- and not a schema-verifiable guarantee.
   `is_unregulated` set to `true` as outside the scope of code-mandated efficiency or power
   allowance checks.
 - Resolve a `TimeSeries.value_time_intervals` reference against the `id` of an entry in the
-  `time_intervals` array of the enclosing `OutputReporting` document.
+  `time_intervals` array of the enclosing `BuildingPerformanceOutputReport` document.
