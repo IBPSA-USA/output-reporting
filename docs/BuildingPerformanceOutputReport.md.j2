@@ -47,6 +47,13 @@ consumption broken out by canonical end-use category and by energy source, wheth
 consumption is regulated or unregulated by code, on-site energy production and export, and the
 time-series structure used to report it.
 
+All quantities reported by this data model are **site energy**: energy delivered to, or
+exported from, the building at its site boundary (e.g., metered utility consumption, delivered
+fuel, on-site generation), as distinct from source (primary) energy, which additionally
+accounts for generation and delivery losses upstream of the site (e.g., power plant and grid
+losses for electricity). This document does not define a site-to-source conversion; see
+Exclusions.
+
 This is a special case of the general data model for building data exchange published in
 **ANSI/ASHRAE/IBPSA Standard 232**; where this document does not otherwise specify a structure,
 convention, or data type, Standard 232 governs.
@@ -77,6 +84,9 @@ This document does not cover:
   correct building total. Placement of end-use energy (e.g., fan energy reported flat versus
   nested under Space Heating or Space Cooling) is a modeling judgment left to the data
   publisher; see Verification Rules and Publishing Rules.
+- Conversion of reported site energy to source (primary) energy. Site-to-source factors are
+  grid-mix- and jurisdiction-specific and are the responsibility of downstream applications,
+  not this data model.
 
 ## Data Model
 
@@ -86,6 +96,11 @@ top-level members: `metadata` (the Standard 232 common `Metadata` data group, co
 `TimeIntervals` data groups, each identified by an `id` that `TimeSeries` elsewhere in the
 document reference), and `energy_sources` (one or more `EnergySource` entries -- the actual
 reported results).
+
+`EnergySource` names the energy carrier delivered to or from the site -- despite the similar
+name, it is unrelated to "source energy" (primary energy) in the site-vs-source sense described
+in Scope, which this data model does not report; an `EnergySource` entry reports *what* carrier
+was delivered, always in site-energy terms, never *where upstream* it originated.
 
 Each `EnergySource` (e.g., electricity, natural gas) carries a `direction` (`IMPORTED`,
 `EXPORTED`, or `ON_SITE_PRODUCTION`) and an array of `EndUse` entries describing what consumed,
