@@ -1,9 +1,9 @@
 name: Deploy Web Documentation
 
 on:
-  release:
-    types:
-      - created
+  push:
+    branches:
+      - main
 
 permissions:
   contents: read
