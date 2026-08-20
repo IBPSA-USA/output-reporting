@@ -4,3 +4,6 @@ description: "A standardized modern data model for characterizing building perfo
 colors:
   primary: grey
   accent: red
+banner: >
+  **Work in progress:** This specification is under active development through a
+  multi-stakeholder consensus process and may change before it is finalized.
