@@ -12,7 +12,7 @@ formats across existing protocols and software tools. The standardized end-use a
 energy-source categories defined here synthesize that same empirical review, corroborated
 against working-group discussion.
 
-## Working Group
+<!-- ## Working Group
 
 - Fred Betz (NeuMod Labs)
 - Liam Buckley (IES)
@@ -35,3 +35,4 @@ against working-group discussion.
 
 This work was funded by the U.S. Department of Energy Building Technologies Office, via
 IBPSA-USA's Building Data Exchange Committee.
+ -->
