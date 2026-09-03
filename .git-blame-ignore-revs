@@ -1,0 +1,5 @@
+# Commits listed here are skipped by `git blame` (and GitHub's blame view) because they
+# are pure reformatting with no semantic change -- see each commit message for what and why.
+
+# Reflow markdown prose to one line per paragraph/list item.
+f2c65fd218d7f3fd64d95fa4022707f40d1b5bb5
