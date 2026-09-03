@@ -89,7 +89,6 @@ TimeSeries:
     values:
       Description: "Time series data values"
       Type: "Array(Numeric)"
-      Units: "-"
       Constraints:
         - "[1..]"
       Required: True
@@ -150,6 +149,16 @@ EndUse:
       Type: "Group(TimeSeries)"
       Constraints:
         - time_series_type=SUM
+        - units="kWh"
+      Nested Attribute Overrides:
+        Units:
+          path: values
+          value: "kWh"
+    notes:
+      Description: "Notes about this end use, e.g. what slice of energy a Fans entry covers"
+      Type: "Array(String)"
+      Constraints:
+        - "[1..]"
 
 EnergySource:
   Object Type: "Data Group"

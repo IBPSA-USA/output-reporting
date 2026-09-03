@@ -58,6 +58,22 @@ This is a special case of the general data model for building data exchange publ
 **ANSI/ASHRAE/IBPSA Standard 232**; where this document does not otherwise specify a structure,
 convention, or data type, Standard 232 governs.
 
+### Units
+
+All energy quantities in this data model (consumption, on-site production, and export alike)
+are reported in kilowatt-hours (kWh). This data model does not support reporting energy
+quantities in any other unit.
+
+Informative Note: A single schema-wide unit is used so that no consumer needs to parse or
+convert an arbitrary per-document unit string. kWh is a common unit among many building performance
+simulation tools and commonly used for energy reporting. Converting from other units is straightforward within export
+tooling. kWh is an exact expression of the coherent SI unit of energy (1 kWh = 3.6 MJ, derived
+directly from the definition of the second), though kWh is itself a conventional composite unit
+(the SI kilo- prefix combined with the non-SI hour), not itself a coherent SI unit, and is not
+coherent with power or demand units the way joules are with watts (converting kWh to kW
+requires a factor of 3,600). No power or demand time series exists in this data model today, so
+that distinction does not currently apply.
+
 ### Applicability
 
 This data model is intended for the exchange of energy performance output between building
