@@ -155,7 +155,7 @@ EndUse:
           path: values
           value: "kWh"
     notes:
-      Description: "Notes about this end use, e.g. what slice of energy a Fans entry covers"
+      Description: "Clarifying notes about this end use"
       Type: "Array(String)"
       Constraints:
         - "[1..]"
