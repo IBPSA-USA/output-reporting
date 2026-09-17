@@ -146,7 +146,7 @@
   </div>
   <div class="figure">
     <div class="label">On-site production</div>
-    <div class="value">{{ (-t.production) | fmt }}<span class="unit">{{ u }}</span></div>
+    <div class="value">{{ t.production | fmt }}<span class="unit">{{ u }}</span></div>
     <div class="sub">{% if t.has_production %}{{ (t.production / t.consumption) | pct }} of building consumption{% else %}None reported{% endif %}</div>
   </div>
   <div class="figure">
@@ -329,7 +329,7 @@
 <h2><span class="num">{{ sec + 2 }}</span>Reporting Conventions</h2>
 <ol class="conventions">
   <li>All values are site energy, as reported in the results file.{% if u != "kWh" %} Values were converted from kWh at 1 kWh = 3.412 kBtu.{% endif %}</li>
-  <li>The report takes the building’s utility-meter perspective: imported energy is building consumption, and on-site production is shown as negative consumption. Net site energy = building consumption − on-site production.{% if t.has_export %} Exported energy is part of on-site production and is not subtracted again.{% endif %}</li>
+  <li>The report takes the building’s utility-meter perspective: imported energy is building consumption, and on-site production is shown as negative where it is combined with building consumption (net site energy rows, columns, and charts). Where production is shown on its own, it is positive. Net site energy = building consumption − on-site production.{% if t.has_export %} Exported energy is part of on-site production and is not subtracted again.{% endif %}</li>
   <li>An end use’s reported energy excludes its subcategories. Roll-ups and end-use totals add the entry’s reported energy and that of all its subcategories.</li>
   <li>Totals are computed before rounding, so displayed values may differ from the sum of displayed parts by 1.</li>
   <li>Interval values are summed energy for the interval ending at each timestamp and are assigned to the month in which the interval starts.</li>

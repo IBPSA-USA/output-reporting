@@ -238,12 +238,9 @@ def summarize(metadata: dict, entries: pd.DataFrame, values: pd.DataFrame, perio
 
     checks = run_checks(e)
 
-    # Detail tables, one per energy source. Production is shown as negative consumption.
-    sign = e.direction.map({PRODUCTION: -1.0}).fillna(1.0)
+    # Detail tables, one per energy source. Each table stands alone, so production is shown as positive.
     source_totals = e.groupby("source_id").energy.transform("sum")
     e["share"] = e.rollup.fillna(e.energy) / source_totals
-    e["reported"] *= sign
-    e["rollup"] *= sign
     details = [
         {
             "label": rows.source.iloc[0] + DIRECTION_LABELS[rows.direction.iloc[0]],
