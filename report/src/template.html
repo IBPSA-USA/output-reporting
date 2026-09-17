@@ -167,7 +167,7 @@
     <tr><td>Regulated consumption</td><td class="n">{{ t.regulated | fmt }}</td><td class="n">{{ (t.regulated / t.consumption) | pct }}</td></tr>
     <tr><td>Unregulated consumption</td><td class="n">{{ t.unregulated | fmt }}</td><td class="n">{{ (t.unregulated / t.consumption) | pct }}</td></tr>
     <tr class="total"><td>Building consumption</td><td class="n">{{ t.consumption | fmt }}</td><td class="n">100.0%</td></tr>
-    <tr class="sub"><td>On-site production</td><td class="n">{{ (-t.production) | fmt }}</td><td class="n">{{ (t.production / t.consumption) | pct }}</td></tr>
+    <tr class="sub"><td>{{ swatch(s.colors.production) }}On-site production</td><td class="n">{{ (-t.production) | fmt }}</td><td class="n">{{ (t.production / t.consumption) | pct }}</td></tr>
     <tr class="net"><td>Net site energy</td><td class="n">{{ t.net | fmt }}</td><td class="n">{{ (t.net / t.consumption) | pct }}</td></tr>
     {% if t.has_export %}
     <tr class="sub"><td>Exported (for information; part of on-site production)</td><td class="n">{{ t.exported | fmt }}</td><td class="n">—</td></tr>
@@ -205,7 +205,7 @@
     </tr>
     {% if t.has_production %}
     <tr class="sub">
-      <td>On-site production</td>
+      <td>{{ swatch(s.colors.production) }}On-site production</td>
       {% for source in sources %}<td class="n">{{ s.source_production[source] | fmt }}</td>{% endfor %}
       <td class="n">{{ (-t.production) | fmt }}</td><td class="n"></td>
     </tr>
@@ -229,7 +229,7 @@
   <tbody>
     {% for row in source.rows.itertuples() %}
     <tr>
-      <td style="padding-left: {{ 10 + 20 * row.level }}px">{% if row.level == 0 and source.direction == "IMPORTED" %}{{ swatch(s.colors.end_uses[row.name]) }}{% endif %}{{ row.name }}</td>
+      <td style="padding-left: {{ 10 + 20 * row.level }}px">{% if row.level == 0 and source.direction == "IMPORTED" %}{{ swatch(s.colors.end_uses[row.name]) }}{% elif row.level == 0 and source.direction == "ON_SITE_PRODUCTION" %}{{ swatch(s.colors.production) }}{% endif %}{{ row.name }}</td>
       <td class="n">{{ row.reported | fmt }}</td>
       <td class="n">{{ row.rollup | fmt }}</td>
       <td class="n">{{ row.share | pct }}</td>
@@ -276,7 +276,7 @@
   <caption>Table {{ n + 2 }}. Monthly energy by source ({{ u }})</caption>
   <thead><tr>
     <th>Month</th>
-    {% for name in s.monthly_source.columns %}<th class="n">{{ name }}</th>{% endfor %}
+    {% for name in s.monthly_source.columns %}<th class="n">{% if name in s.colors.sources and name in s.use_sources %}{{ swatch(s.colors.sources[name]) }}{% elif name == "On-site production" %}{{ swatch(s.colors.production) }}{% endif %}{{ name }}</th>{% endfor %}
   </tr></thead>
   <tbody>
     {% for month, row in s.monthly_source.iterrows() %}
@@ -331,6 +331,7 @@
   <li>All values are site energy, as reported in the results file.{% if u != "kWh" %} Values were converted from kWh at 1 kWh = 3.412 kBtu.{% endif %}</li>
   <li>The report takes the building’s utility-meter perspective: imported energy is building consumption, and on-site production is shown as negative where it is combined with building consumption (net site energy rows, columns, and charts). Where production is shown on its own, it is positive. Net site energy = building consumption − on-site production.{% if t.has_export %} Exported energy is part of on-site production and is not subtracted again.{% endif %}</li>
   <li>An end use’s reported energy excludes its subcategories. Roll-ups and end-use totals add the entry’s reported energy and that of all its subcategories.</li>
+  <li>Canonical end uses and energy sources use recommended colors (warm for heating, blue for cooling, gold for lighting, green for on-site production) that are the same in every report. Custom names are gray.</li>
   <li>Totals are computed before rounding, so displayed values may differ from the sum of displayed parts by 1.</li>
   <li>Interval values are summed energy for the interval ending at each timestamp and are assigned to the month in which the interval starts.</li>
 </ol>

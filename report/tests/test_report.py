@@ -63,3 +63,9 @@ def test_short_period_is_rejected():
 def test_zero_consumption_is_flagged():
     checks = report.summarize(*report.load(EXAMPLES / "courthouse_proposed.json"))["checks"]
     assert "Electricity › Space Heating: reported as zero for the whole period." in [c["message"] for c in checks]
+
+
+def test_recommended_colors_cover_canonical_names():
+    sources, end_uses = report.canonical_order()
+    assert set(report.END_USE_COLORS) == set(end_uses)
+    assert set(report.SOURCE_COLORS) == set(sources)

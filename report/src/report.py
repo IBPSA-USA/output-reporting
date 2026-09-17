@@ -40,11 +40,31 @@ PRODUCTION = "ON_SITE_PRODUCTION"
 EXPORT = "EXPORTED"
 DIRECTION_LABELS = {CONSUMPTION: "", PRODUCTION: " (on-site production)", EXPORT: " (exported)"}
 
-# Colors. Canonical names take PALETTE colors in schema order, so they match from report to report.
-# Custom names take GRAYS in order of appearance.
-PALETTE = ["#2a78d6", "#eb6834", "#1baf7a", "#eda100", "#e87ba4", "#008300", "#4a3aa7", "#e34948"]
+# Recommended colors for the canonical end uses and energy sources, so a category has the same color in
+# every report: warm colors for heating, blue for cooling, gold for lighting. The orders are chosen so
+# neighboring colors in the stacked charts (schema order) stay distinct, including for color-blind readers.
+END_USE_COLORS = {
+    "Lighting": "#eda100",  # gold
+    "Space Heating": "#e34948",  # red
+    "Space Cooling": "#2a78d6",  # blue
+    "Water Heating": "#eb6834",  # orange
+    "Miscellaneous": "#4a3aa7",  # violet
+    "Fans": "#e87ba4",  # pink
+    "Humidification": "#008300",  # green
+    "Pumps": "#1baf7a",  # aqua
+}
+SOURCE_COLORS = {
+    "Electricity": "#1baf7a",  # aqua
+    "Natural Gas": "#eb6834",  # orange
+    "Fuel Oil": "#4a3aa7",  # violet
+    "Propane": "#eda100",  # gold
+    "Chilled Water": "#2a78d6",  # blue
+    "Hot Water": "#e34948",  # red
+    "Steam": "#e87ba4",  # pink
+}
+PRODUCTION_COLOR = "#0b4d2c"  # forest green, for all on-site production
+# Custom (non-canonical) names take these grays in order of appearance.
 GRAYS = ["#8c8a83", "#b4b2a9", "#6b6963", "#cfcdc5", "#a09e96", "#5a5853"]
-PRODUCTION_COLOR = "#3f4a55"
 SURFACE, INK, INK_2, MUTED, GRID, AXIS = "#fcfcfb", "#0b0b0b", "#52514e", "#898781", "#e1e0d9", "#c3c2b7"
 
 # Charts are laid out with matplotlib's bundled font; the page CSS displays the text in the report font.
@@ -175,12 +195,10 @@ def ordered(names, preferred: list[str]) -> list[str]:
     return [n for n in preferred if n in names] + [n for n in names if n not in preferred]
 
 
-def assign_colors(names: list[str], canonical: list[str], custom: set[str]) -> dict[str, str]:
+def assign_colors(names: list[str], recommended: dict[str, str], custom: set[str]) -> dict[str, str]:
+    """Recommended color for canonical names; grays, in order, for custom names."""
     grays = iter(GRAYS * len(names))
-    return {
-        n: PALETTE[canonical.index(n)] if n in canonical[: len(PALETTE)] and n not in custom else next(grays)
-        for n in names
-    }
+    return {n: recommended[n] if n in recommended and n not in custom else next(grays) for n in names}
 
 
 def run_checks(e: pd.DataFrame) -> list[dict]:
@@ -223,8 +241,9 @@ def summarize(metadata: dict, entries: pd.DataFrame, values: pd.DataFrame, perio
     use_sources = ordered(use.source, source_order)
     columns = ordered(list(use.source) + list(made.source), source_order)  # Table 1 columns
     colors = {
-        "end_uses": assign_colors(end_uses, end_use_order, set(use.loc[use.is_custom & (use.level == 0), "name"])),
-        "sources": assign_colors(columns, source_order, set(e.loc[e.source_is_custom, "source"])),
+        "end_uses": assign_colors(end_uses, END_USE_COLORS, set(use.loc[use.is_custom & (use.level == 0), "name"])),
+        "sources": assign_colors(columns, SOURCE_COLORS, set(e.loc[e.source_is_custom, "source"])),
+        "production": PRODUCTION_COLOR,
     }
 
     # Table 1: top-level end use x energy source. Blank (NaN) where a source doesn't serve that end use.
