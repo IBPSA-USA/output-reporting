@@ -3,6 +3,7 @@ doit task/build automation
 """
 
 import os
+import sys
 
 from lattice import Lattice
 
@@ -25,4 +26,12 @@ def task_generate_web_docs():
         + [template.path for template in reporting_data_model.doc_templates],
         "targets": [os.path.join(reporting_data_model.web_docs_directory_path, "public")],
         "actions": [(reporting_data_model.generate_web_documentation, [])],
+    }
+
+
+def task_test_report():
+    """Runs the report tool tests"""
+    return {
+        "actions": [f'"{sys.executable}" -m pytest report/tests -q'],
+        "verbosity": 2,
     }

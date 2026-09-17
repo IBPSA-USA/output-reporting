@@ -7,7 +7,7 @@ requires-python = ">=3.11"
 dependencies = ["lattice"]
 
 [dependency-groups]
-dev = ["doit"]
+dev = ["doit", "pytest"]
 report = ["jinja2", "matplotlib", "pandas", "pyyaml"]
 
 [tool.uv]
