@@ -8,6 +8,10 @@ dependencies = ["lattice"]
 
 [dependency-groups]
 dev = ["doit"]
+report = ["jinja2", "matplotlib", "pandas", "pyyaml"]
+
+[tool.uv]
+default-groups = ["dev", "report"]
 
 [build-system]
 requires = ["hatchling"]

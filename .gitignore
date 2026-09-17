@@ -7,3 +7,4 @@ __pycache__/
 .lattice/
 .venv/
 docs/notes/end_uses_notes.md
+report/output/

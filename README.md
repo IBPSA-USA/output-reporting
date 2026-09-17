@@ -20,6 +20,7 @@ This work is funded by the U.S. Department of Energy Building Technologies Offic
 | [`docs/BuildingPerformanceOutputReport.md.j2`](docs/BuildingPerformanceOutputReport.md.j2) | Jinja2 template used to render the schema into the human-readable specification document. |
 | [`docs/web/`](docs/web/) | Site content and configuration (About page, theming, logo) for the published documentation site. |
 | [`examples/`](examples/) | Example data files conforming to the schema. |
+| [`report/`](report/) | Draft tool that renders a results file as an HTML energy report. |
 | `dodo.py` | Build tasks (schema validation, documentation generation), run via [doit](https://pydoit.org/). |
 
 This repository is built on [lattice](https://github.com/bigladder/lattice), Big Ladder Software's schema-and-documentation toolchain, which is also used by related standards such as [ASHRAE 205](https://github.com/open205/schema-205).

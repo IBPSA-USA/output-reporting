@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Energy Performance Report — {{ file_name }}</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    color-scheme: light;
+    --page: #f4f3ef;
+    --paper: #fcfcfb;
+    --ink: #0b0b0b;
+    --ink-2: #52514e;
+    --muted: #898781;
+    --rule: #e1e0d9;
+    --rule-strong: #c3c2b7;
+    --band: #f6f5f1;
+    --accent: #184f95;
+    --accent-soft: #e8f0fb;
+    --warn: #b86e00;
+    --error: #b02a2a;
+  }
+  * { box-sizing: border-box; }
+  html { background: var(--page); }
+  body {
+    margin: 0;
+    background: var(--page);
+    color: var(--ink);
+    font: 15px/1.55 Inter, system-ui, sans-serif;
+    font-feature-settings: "cv11", "ss01";
+    -webkit-font-smoothing: antialiased;
+  }
+  .page {
+    max-width: 1040px;
+    margin: 32px auto;
+    padding: 56px 64px 64px;
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    box-shadow: 0 1px 2px rgba(0,0,0,.04), 0 8px 24px rgba(0,0,0,.04);
+  }
+  header.report { border-bottom: 3px solid var(--accent); padding-bottom: 24px; margin-bottom: 8px; }
+  h1 { font-size: 32px; line-height: 1.2; font-weight: 700; letter-spacing: -.02em; margin: 0 0 4px; color: var(--accent); }
+  h2 {
+    font-size: 20px; font-weight: 650; letter-spacing: -.01em;
+    margin: 48px 0 6px; padding-top: 20px; border-top: 1px solid var(--rule);
+  }
+  header.report + h2 { border-top: 0; margin-top: 28px; }
+  h2 .num { color: var(--accent); margin-right: 10px; font-variant-numeric: tabular-nums; }
+  h3 { font-size: 15px; font-weight: 600; margin: 28px 0 8px; }
+  p.section-note, .caption { color: var(--ink-2); font-size: 13.5px; margin: 0 0 16px; max-width: 80ch; }
+  .caption { margin: 6px 0 0; }
+
+  dl.meta { display: grid; grid-template-columns: max-content 1fr; gap: 6px 24px; margin: 20px 0 0; font-size: 13.5px; }
+  dl.meta dt { color: var(--muted); }
+  dl.meta dd { margin: 0; overflow-wrap: anywhere; }
+  code, .mono { font-family: ui-monospace, monospace; font-size: .9em; }
+
+  .figures { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; margin: 20px 0 8px; border: 1px solid var(--rule); border-radius: 6px; }
+  .figure { padding: 16px 18px; border-left: 1px solid var(--rule); }
+  .figure:first-child { border-left: 0; }
+  .figure .label { font-size: 12.5px; color: var(--ink-2); }
+  .figure .value { font-size: 26px; font-weight: 650; letter-spacing: -.02em; line-height: 1.25; margin-top: 4px; }
+  .figure .unit { font-size: 13px; font-weight: 500; color: var(--muted); margin-left: 4px; }
+  .figure .sub { font-size: 12px; color: var(--muted); margin-top: 2px; }
+  .figure.net { background: var(--accent-soft); border-radius: 0 5px 5px 0; }
+  .figure.net .value { color: var(--accent); }
+
+  table { width: 100%; border-collapse: collapse; font-size: 13.5px; margin: 8px 0 4px; }
+  caption { text-align: left; font-weight: 600; font-size: 13.5px; padding: 0 0 8px; }
+  th, td { padding: 7px 10px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+  thead th { font-size: 12px; font-weight: 600; color: var(--ink-2); text-align: left; border-bottom: 1.5px solid var(--rule-strong); white-space: nowrap; }
+  th.n, td.n { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  tbody tr:nth-child(even) td { background: var(--band); }
+  tr.total td { font-weight: 650; border-top: 1.5px solid var(--rule-strong); background: var(--paper) !important; }
+  tr.sub td { color: var(--ink-2); background: var(--paper) !important; }
+  tr.net td { font-weight: 700; color: var(--accent); background: var(--accent-soft) !important; border-bottom: 0; }
+  td.muted { color: var(--muted); }
+  .swatch { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 8px; vertical-align: -0.5px; }
+  .tag { display: inline-block; font-size: 11px; font-weight: 600; padding: 1px 7px; border-radius: 999px; margin: 0 4px 2px 0; white-space: nowrap; }
+  .tag.custom { background: #eeedf8; color: #4a3aa7; }
+  ul.checks { list-style: none; padding: 0; margin: 8px 0; font-size: 13.5px; }
+  ul.checks li { padding: 7px 0; border-bottom: 1px solid var(--rule); display: flex; gap: 12px; }
+  .level { flex: 0 0 64px; font-size: 11px; font-weight: 700; text-transform: uppercase; padding-top: 2px; }
+  .level.warning { color: var(--warn); } .level.info { color: var(--muted); }
+  .tag.unreg { background: #fdf0e3; color: #8a4b00; }
+  td.notes { color: var(--ink-2); font-size: 12.5px; max-width: 340px; }
+  .table-wrap { overflow-x: auto; }
+
+  figure.chart { margin: 20px 0 8px; }
+  figure.chart svg { width: 100%; height: auto; display: block; }
+  figure.chart svg text { font-family: Inter, system-ui, sans-serif !important; }
+  figcaption { font-size: 13px; color: var(--ink-2); margin-top: 6px; }
+  figcaption strong { color: var(--ink); font-weight: 600; }
+
+
+  ol.conventions { font-size: 13px; color: var(--ink-2); padding-left: 20px; }
+  footer { margin-top: 48px; padding-top: 16px; border-top: 1px solid var(--rule); font-size: 12px; color: var(--muted); display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+
+  @media (max-width: 760px) {
+    .page { margin: 0; padding: 28px 16px; border: 0; border-radius: 0; }
+    .figures { grid-template-columns: repeat(2, 1fr); }
+    .figure:nth-child(3) { border-left: 0; }
+    .figure:nth-child(n+3) { border-top: 1px solid var(--rule); }
+    dl.meta { grid-template-columns: 1fr; gap: 0 0; }
+    dl.meta dd { margin-bottom: 8px; }
+  }
+  @media print {
+    html, body { background: #fff; }
+    .page { margin: 0; padding: 0; border: 0; box-shadow: none; max-width: none; }
+    h2 { break-after: avoid; }
+    figure.chart, table { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+<main class="page">
+{% set u = s.units %}
+{% set t = s.totals %}
+{% set m = s.metadata %}
+{% macro swatch(color) %}<span class="swatch" style="background: {{ color }}"></span>{% endmacro %}
+
+<header class="report">
+  <h1>Energy Performance Report</h1>
+  <dl class="meta">
+    <dt>Results file</dt><dd class="mono">{{ file_name }}</dd>
+    {% if m.description %}<dt>Description</dt><dd>{{ m.description }}</dd>{% endif %}
+    <dt>Reporting period</dt><dd>{{ s.period.start | date }} – {{ s.period.end | date }} · {{ s.period.resolution }}</dd>
+    <dt>Unit system</dt><dd>{{ s.unit_system }} · energy in {{ u }} (site energy)</dd>
+    <dt>File author</dt><dd>{{ m.author or "—" }}</dd>
+    <dt>File created</dt><dd>{{ m.time_of_creation or "—" }} · version {{ m.version or "—" }}</dd>
+    <dt>Schema</dt><dd>{{ m.schema_name }} {{ m.schema_version }}</dd>
+    <dt>File ID</dt><dd class="mono">{{ m.id or "—" }}</dd>
+  </dl>
+</header>
+
+<h2><span class="num">1</span>Summary</h2>
+<div class="figures">
+  <div class="figure">
+    <div class="label">Building consumption</div>
+    <div class="value">{{ t.consumption | fmt }}<span class="unit">{{ u }}</span></div>
+    <div class="sub">All end uses, before production</div>
+  </div>
+  <div class="figure">
+    <div class="label">On-site production</div>
+    <div class="value">{{ (-t.production) | fmt }}<span class="unit">{{ u }}</span></div>
+    <div class="sub">{% if t.has_production %}{{ (t.production / t.consumption) | pct }} of building consumption{% else %}None reported{% endif %}</div>
+  </div>
+  <div class="figure">
+    <div class="label">Unregulated share</div>
+    <div class="value">{{ (t.unregulated / t.consumption) | pct }}</div>
+    <div class="sub">Percent of building consumption</div>
+  </div>
+  <div class="figure net">
+    <div class="label">Net site energy</div>
+    <div class="value">{{ t.net | fmt }}<span class="unit">{{ u }}</span></div>
+    <div class="sub">{% if t.net < 0 %}Net producer{% else %}Consumption − production{% endif %}</div>
+  </div>
+</div>
+
+<table>
+  <thead><tr><th>Quantity</th><th class="n">{{ u }}</th><th class="n">Share of building consumption</th></tr></thead>
+  <tbody>
+    <tr><td>Regulated consumption</td><td class="n">{{ t.regulated | fmt }}</td><td class="n">{{ (t.regulated / t.consumption) | pct }}</td></tr>
+    <tr><td>Unregulated consumption</td><td class="n">{{ t.unregulated | fmt }}</td><td class="n">{{ (t.unregulated / t.consumption) | pct }}</td></tr>
+    <tr class="total"><td>Building consumption</td><td class="n">{{ t.consumption | fmt }}</td><td class="n">100.0%</td></tr>
+    <tr class="sub"><td>On-site production</td><td class="n">{{ (-t.production) | fmt }}</td><td class="n">{{ (t.production / t.consumption) | pct }}</td></tr>
+    <tr class="net"><td>Net site energy</td><td class="n">{{ t.net | fmt }}</td><td class="n">{{ (t.net / t.consumption) | pct }}</td></tr>
+    {% if t.has_export %}
+    <tr class="sub"><td>Exported (for information; part of on-site production)</td><td class="n">{{ t.exported | fmt }}</td><td class="n">—</td></tr>
+    {% endif %}
+  </tbody>
+</table>
+
+<h2><span class="num">2</span>Energy by Source and End Use</h2>
+<p class="section-note">Annual energy by top-level end use. Each end use includes the energy of all its subcategories.</p>
+<figure class="chart">
+  {{ charts.end_uses | safe }}
+  <figcaption><strong>Figure 1.</strong> Annual building consumption by end use, all energy sources ({{ u }}).</figcaption>
+</figure>
+{% set sources = s.source_consumption.index %}
+<div class="table-wrap">
+<table>
+  <caption>Table 1. Annual building consumption by end use and energy source ({{ u }})</caption>
+  <thead><tr>
+    <th>End use</th>
+    {% for source in sources %}<th class="n">{{ source }}</th>{% endfor %}
+    <th class="n">Total</th><th class="n">Share</th>
+  </tr></thead>
+  <tbody>
+    {% for name, row in s.by_end_use.iterrows() %}
+    <tr>
+      <td>{{ swatch(s.colors.end_uses[name]) }}{{ name }}</td>
+      {% for source in sources %}<td class="n">{{ row[source] | fmt }}</td>{% endfor %}
+      <td class="n">{{ row.Total | fmt }}</td><td class="n">{{ row.Share | pct }}</td>
+    </tr>
+    {% endfor %}
+    <tr class="total">
+      <td>Building consumption</td>
+      {% for source in sources %}<td class="n">{{ s.source_consumption[source] | fmt }}</td>{% endfor %}
+      <td class="n">{{ t.consumption | fmt }}</td><td class="n">100.0%</td>
+    </tr>
+    {% if t.has_production %}
+    <tr class="sub">
+      <td>On-site production</td>
+      {% for source in sources %}<td class="n">{{ s.source_production[source] | fmt }}</td>{% endfor %}
+      <td class="n">{{ (-t.production) | fmt }}</td><td class="n"></td>
+    </tr>
+    <tr class="net">
+      <td>Net site energy</td>
+      {% for source in sources %}<td class="n">{{ s.source_net[source] | fmt }}</td>{% endfor %}
+      <td class="n">{{ t.net | fmt }}</td><td class="n"></td>
+    </tr>
+    {% endif %}
+  </tbody>
+</table>
+</div>
+
+<h2><span class="num">3</span>End-Use Detail</h2>
+<p class="section-note">Every end use and subcategory as reported in the file. <em>Reported</em> is the energy reported directly on that entry. <em>Roll-up</em> is shown for entries with subcategories and adds the energy of all their subcategories to the entry’s reported energy. A reported value never includes subcategory energy, so the <em>Reported</em> column sums to the source total. <em>Share</em> uses the roll-up where shown, otherwise the reported value.</p>
+{% for source in s.details %}
+<div class="table-wrap">
+<table>
+  <caption>Table {{ loop.index + 1 }}. {{ source.label }}{% if source.is_custom %} <span class="tag custom">custom</span>{% endif %}</caption>
+  <thead><tr><th>End use</th><th class="n">Reported ({{ u }})</th><th class="n">Roll-up ({{ u }})</th><th class="n">Share</th><th>Flags</th><th>Notes</th></tr></thead>
+  <tbody>
+    {% for row in source.rows.itertuples() %}
+    <tr>
+      <td style="padding-left: {{ 10 + 20 * row.level }}px">{% if row.level == 0 and source.direction == "IMPORTED" %}{{ swatch(s.colors.end_uses[row.name]) }}{% endif %}{{ row.name }}</td>
+      <td class="n">{{ row.reported | fmt }}</td>
+      <td class="n">{{ row.rollup | fmt }}</td>
+      <td class="n">{{ row.share | pct }}</td>
+      <td>{% if row.is_custom %}<span class="tag custom">custom</span>{% endif %}{% if row.is_unregulated %}<span class="tag unreg">unregulated</span>{% endif %}</td>
+      <td class="notes">{{ row.notes }}</td>
+    </tr>
+    {% endfor %}
+    <tr class="total"><td>Total</td><td class="n">{{ source.total | fmt }}</td><td></td><td></td><td></td><td></td></tr>
+  </tbody>
+</table>
+</div>
+{% endfor %}
+{% set n = s.details | length + 1 %}
+{% set monthly = s.monthly_end_use is not none %}
+{% if monthly %}
+
+<h2><span class="num">4</span>Monthly Energy</h2>
+<p class="section-note">Each interval is assigned to the month in which it starts.{% if t.has_production %} On-site production is plotted below zero; the line is net site energy.{% endif %}</p>
+<figure class="chart">
+  {{ charts.monthly_end_uses | safe }}
+  <figcaption><strong>Figure 2.</strong> Monthly building consumption by end use ({{ u }}).</figcaption>
+</figure>
+<div class="table-wrap">
+<table>
+  <caption>Table {{ n + 1 }}. Monthly building consumption by end use ({{ u }})</caption>
+  <thead><tr>
+    <th>Month</th>
+    {% for name in s.monthly_end_use.columns %}<th class="n">{% if name in s.colors.end_uses %}{{ swatch(s.colors.end_uses[name]) }}{% endif %}{{ name }}</th>{% endfor %}
+  </tr></thead>
+  <tbody>
+    {% for month, row in s.monthly_end_use.iterrows() %}
+    <tr><td>{{ month }}</td>{% for value in row %}<td class="n">{{ value | fmt }}</td>{% endfor %}</tr>
+    {% endfor %}
+    <tr class="total"><td>Total</td>{% for value in s.monthly_end_use.sum() %}<td class="n">{{ value | fmt }}</td>{% endfor %}</tr>
+  </tbody>
+</table>
+</div>
+<figure class="chart">
+  {{ charts.monthly_sources | safe }}
+  <figcaption><strong>Figure 3.</strong> Monthly building consumption by energy source ({{ u }}).</figcaption>
+</figure>
+<div class="table-wrap">
+<table>
+  <caption>Table {{ n + 2 }}. Monthly energy by source ({{ u }})</caption>
+  <thead><tr>
+    <th>Month</th>
+    {% for name in s.monthly_source.columns %}<th class="n">{{ name }}</th>{% endfor %}
+  </tr></thead>
+  <tbody>
+    {% for month, row in s.monthly_source.iterrows() %}
+    <tr><td>{{ month }}</td>{% for value in row %}<td class="n">{{ value | fmt }}</td>{% endfor %}</tr>
+    {% endfor %}
+    <tr class="total"><td>Total</td>{% for value in s.monthly_source.sum() %}<td class="n">{{ value | fmt }}</td>{% endfor %}</tr>
+  </tbody>
+</table>
+</div>
+
+{% endif %}
+{% set sec = 5 if monthly else 4 %}
+
+<h2><span class="num">{{ sec }}</span>Regulated and Unregulated Energy</h2>
+<p class="section-note">Unregulated energy is not subject to code-mandated efficiency or power allowances. The flag applies only to the entry it is set on.</p>
+<div class="table-wrap">
+<table>
+  <caption>Table {{ n + (3 if monthly else 1) }}. Building consumption by regulation status ({{ u }})</caption>
+  <thead><tr><th>End use</th><th class="n">Regulated</th><th class="n">Unregulated</th><th class="n">Total</th><th class="n">Unregulated share</th></tr></thead>
+  <tbody>
+    {% for name, row in s.regulation.iterrows() %}
+    <tr>
+      <td>{{ swatch(s.colors.end_uses[name]) }}{{ name }}</td>
+      <td class="n">{{ row.Regulated | fmt }}</td>
+      <td class="n">{{ row.Unregulated | fmt }}</td>
+      <td class="n">{{ row.Total | fmt }}</td>
+      <td class="n">{{ row["Unregulated share"] | pct }}</td>
+    </tr>
+    {% endfor %}
+    <tr class="total">
+      <td>Total</td><td class="n">{{ t.regulated | fmt }}</td><td class="n">{{ t.unregulated | fmt }}</td>
+      <td class="n">{{ t.consumption | fmt }}</td><td class="n">{{ (t.unregulated / t.consumption) | pct }}</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<h2><span class="num">{{ sec + 1 }}</span>Data Checks</h2>
+<p class="section-note">Publishing checks on names and values. The results file is assumed to be valid against the schema.</p>
+{% if s.checks %}
+<ul class="checks">
+  {% for c in s.checks %}
+  <li><span class="level {{ c.level }}">{{ c.level }}</span><span>{{ c.message }}</span></li>
+  {% endfor %}
+</ul>
+{% else %}
+<p class="section-note">No issues found.</p>
+{% endif %}
+
+<h2><span class="num">{{ sec + 2 }}</span>Reporting Conventions</h2>
+<ol class="conventions">
+  <li>All values are site energy, as reported in the results file.{% if u != "kWh" %} Values were converted from kWh at 1 kWh = 3.412 kBtu.{% endif %}</li>
+  <li>The report takes the building’s utility-meter perspective: imported energy is building consumption, and on-site production is shown as negative consumption. Net site energy = building consumption − on-site production.{% if t.has_export %} Exported energy is part of on-site production and is not subtracted again.{% endif %}</li>
+  <li>An end use’s reported energy excludes its subcategories. Roll-ups and end-use totals add the entry’s reported energy and that of all its subcategories.</li>
+  <li>Totals are computed before rounding, so displayed values may differ from the sum of displayed parts by 1.</li>
+  <li>Interval values are summed energy for the interval ending at each timestamp and are assigned to the month in which the interval starts.</li>
+</ol>
+
+<footer>
+  <span>Generated {{ generated.strftime("%Y-%m-%d %H:%M %Z") }} from <span class="mono">{{ file_name }}</span></span>
+  <span>Building Performance Output Report · draft report tool</span>
+</footer>
+</main>
+</body>
+</html>
