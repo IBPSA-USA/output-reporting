@@ -12,7 +12,9 @@ uv run python report/src/report.py examples/courthouse_proposed.json
 uv run python report/src/report.py examples/courthouse_proposed.json --units kBtu
 ```
 
-Reports are written to `report/output/`. Git ignores that folder except for the published example reports (listed in `.gitignore`). With no input file, the courthouse example is used.
+Reports are written to `report/output/`, which is not tracked by git.
+
+The example reports are published with the documentation site instead: `uv run doit publish_example_reports` builds them, and an index page, into the generated site, and the web build does the same on every push to `main`. With no input file, the courthouse example is used.
 
 ## Supported input
 

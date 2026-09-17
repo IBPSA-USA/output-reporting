@@ -2,6 +2,8 @@ The Building Performance Output Report standardizes how building performance sim
 
 This document provides the data model specification and was developed through a stakeholder consensus process by the IBPSA-USA Building Data Exchange (BDE) Committee, building on a prior BDE review that catalogued dozens of fragmented BEM output-reporting formats across existing protocols and software tools. The standardized end-use and energy-source categories defined here synthesize that same empirical review, corroborated against working-group discussion.
 
+[Example energy performance reports](reports/) generated from this repository's example files show what a conforming file can be turned into.
+
 ## Ongoing Consensus-Driven Development
 
 Establishing a canonical set of end-use and energy-source categories that works across the diversity of building types, systems, and simulation tools is inherently an iterative undertaking, not a one-time classification exercise. As the specification is put to use, ambiguous boundaries surface that the current taxonomy doesn't yet resolve cleanly — these are tracked as [`question`-labeled issues](https://github.com/IBPSA-USA/output-reporting/issues?q=is%3Aissue+is%3Aopen+label%3Aquestion) in the [GitHub repository](https://github.com/IBPSA-USA/output-reporting). Identifying and resolving these cases is ongoing work, and the working group is actively seeking feedback from all users of this schema - especially for cases outside of the direct expertise of its members.

@@ -29,6 +29,18 @@ def task_generate_web_docs():
     }
 
 
+def task_publish_example_reports():
+    """Adds the example reports to the generated web documentation"""
+    return {
+        "task_dep": ["generate_web_docs"],
+        "actions": [
+            f'"{sys.executable}" report/src/publish.py '
+            f'"{os.path.join(reporting_data_model.web_docs_directory_path, "public", "reports")}"'
+        ],
+        "verbosity": 2,
+    }
+
+
 def task_test_report():
     """Runs the report tool tests"""
     return {
