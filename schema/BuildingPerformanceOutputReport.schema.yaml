@@ -137,7 +137,9 @@ EndUse:
     is_unregulated:
       Description: "Indicates this end use's energy is not subject to code-mandated efficiency/power allowances (e.g., process loads)"
       Type: Boolean
-      Notes: "Defaults to false when absent."
+      Notes:
+        - "Defaults to false when absent."
+        - "Applies only to this end use's own `consumption`; not inherited by `subcategories`."
     subcategories:
       Description: "Further breakdown of this end use's energy consumption"
       Type: "Array(Group(EndUse))"
@@ -150,6 +152,7 @@ EndUse:
       Constraints:
         - time_series_type=SUM
         - units="kWh"
+      Notes: "Excludes energy reported by `subcategories`."
       Nested Attribute Overrides:
         Units:
           path: values

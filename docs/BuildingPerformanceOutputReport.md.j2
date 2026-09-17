@@ -65,7 +65,7 @@ A conformant `BuildingPerformanceOutputReport` document is a single object with 
 
 `EnergySource` names the energy carrier delivered to or from the site -- despite the similar name, it is unrelated to "source energy" (primary energy) in the site-vs-source sense described in Scope, which this data model does not report; an `EnergySource` entry reports *what* carrier was delivered, always in site-energy terms, never *where upstream* it originated.
 
-Each `EnergySource` (e.g., electricity, natural gas) carries a `direction` (`IMPORTED`, `EXPORTED`, or `ON_SITE_PRODUCTION`) and an array of `EndUse` entries describing what consumed, produced, or exported that energy. `EndUse` is recursive: any entry may carry `subcategories`, an array of further `EndUse` entries, to any depth, alongside its own `consumption` (a `TimeSeries` whose `time_series_type` is constrained to `SUM`, referencing one of the document's `TimeIntervals` by `id`). An `EndUse` with subcategories may or may not also report its own `consumption` directly, depending on whether the reported total is already implicit in the sum of its subcategories.
+Each `EnergySource` (e.g., electricity, natural gas) carries a `direction` (`IMPORTED`, `EXPORTED`, or `ON_SITE_PRODUCTION`) and an array of `EndUse` entries describing what consumed, produced, or exported that energy. `EndUse` is recursive: any entry may carry `subcategories`, an array of further `EndUse` entries, to any depth, alongside its own `consumption` (a `TimeSeries` whose `time_series_type` is constrained to `SUM`, referencing one of the document's `TimeIntervals` by `id`). An `EndUse` may carry `consumption`, `subcategories`, or both. An `EndUse`'s `consumption` reports only energy not reported by any of its `subcategories`; it never includes its subcategories' consumption.
 
 ### Canonical Energy Sources
 
@@ -155,4 +155,5 @@ The following rules are in addition to the value ranges and enumerations already
 - Do not assume that two `EndUse` entries in the same document -- e.g., a flat `Fans` entry and a `Fans` entry nested under `Space Heating` -- report non-overlapping energy. Read each entry's `notes` (see Publishing Rules) to determine what it covers before aggregating `consumption` values across a document.
 - Treat an absent `is_custom` or `is_unregulated` value as `false`, consistent with each data element's documented default.
 - Applications performing code-compliance review should treat `EndUse` entries with `is_unregulated` set to `true` as outside the scope of code-mandated efficiency or power allowance checks.
+- To total an `EndUse`, sum its own `consumption` (if any) and the `consumption` of all its descendant subcategories. Treat `is_unregulated` as applying only to the `EndUse` it is set on, not to its subcategories.
 - Resolve a `TimeSeries.value_time_intervals` reference against the `id` of an entry in the `time_intervals` array of the enclosing `BuildingPerformanceOutputReport` document.
