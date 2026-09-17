@@ -7,3 +7,13 @@ __pycache__/
 .lattice/
 .venv/
 docs/notes/end_uses_notes.md
+
+# Generated reports: ignored, except the published example reports.
+report/output/*
+!report/output/courthouse_baseline.html
+!report/output/courthouse_proposed.html
+!report/output/courthouse_proposed_kBtu.html
+!report/output/courthouse_proposed_monthly.html
+!report/output/higher_ed_lab_baseline.html
+!report/output/higher_ed_lab_proposed.html
+!report/output/synthetic_stress_test.html
