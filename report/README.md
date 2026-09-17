@@ -10,7 +10,7 @@ uv run python report/src/report.py examples/courthouse_proposed.json
 uv run python report/src/report.py examples/courthouse_proposed.json --units kBtu
 ```
 
-Reports are written to `report/output/` (not tracked). With no input file, the courthouse example is used.
+Reports are written to `report/output/`, which holds the reports for the example files. With no input file, the courthouse example is used.
 
 ## Supported input
 
