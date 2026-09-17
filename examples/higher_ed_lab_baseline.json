@@ -61427,6 +61427,7 @@
         },
         {
           "name": "Miscellaneous",
+          "is_unregulated": true,
           "consumption": {
             "name": "Miscellaneous",
             "units": "kWh",
@@ -70198,6 +70199,7 @@
           "subcategories": [
             {
               "name": "Elevators and Escalators",
+              "is_unregulated": true,
               "consumption": {
                 "name": "Miscellaneous | Elevators and Escalators",
                 "units": "kWh",
