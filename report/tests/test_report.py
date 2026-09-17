@@ -76,3 +76,9 @@ def test_example_reports_are_published():
     gitignore = (report.REPO_DIR / ".gitignore").read_text(encoding="utf-8").splitlines()
     for path in REPORTABLE:
         assert f"!report/output/{path.stem}.html" in gitignore, f"add !report/output/{path.stem}.html to .gitignore"
+
+
+def test_report_version_is_stamped():
+    path = EXAMPLES / "courthouse_proposed.json"
+    html = report.render(report.summarize(*report.load(path)), path.name)
+    assert f"Example Report v{report.REPORT_VERSION}" in html

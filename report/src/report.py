@@ -1,5 +1,12 @@
 """
-Generate a static HTML report from a Building Performance Output Report JSON file.
+Building Performance Output Report - Example Report (v0.1.0)
+
+Generates a static HTML report from a Building Performance Output Report JSON file.
+
+Versioning (REPORT_VERSION below) is semantic and describes this report, not the schema: the patch
+number changes for fixes, the minor number when the report gains or rearranges content, and the major
+number when its structure changes in a way that would break a reader's expectations. The version is
+stamped in the report footer.
 
 Usage:
     uv run python report/src/report.py [input.json] [--units kBtu] [-o out.html]
@@ -30,6 +37,9 @@ REPO_DIR = REPORT_DIR.parent
 SCHEMA_PATH = REPO_DIR / "schema" / "BuildingPerformanceOutputReport.schema.yaml"
 DEFAULT_INPUT = REPO_DIR / "examples" / "courthouse_proposed.json"
 DEFAULT_OUTPUT_DIR = REPORT_DIR / "output"
+
+REPORT_NAME = "Building Performance Output Report"
+REPORT_VERSION = "0.1.0"
 
 UNITS = {"kWh": 1.0, "kBtu": 3.412141633}  # conversion factors from kWh
 UNIT_SYSTEMS = {"kWh": "SI", "kBtu": "IP"}
@@ -237,9 +247,13 @@ def summarize(metadata: dict, entries: pd.DataFrame, values: pd.DataFrame, perio
         raise UnsupportedFile("the file reports no building consumption (IMPORTED energy).")
     unregulated = use.loc[use.is_unregulated, "energy"].sum()
 
-    end_uses = ordered(use.top_level, end_use_order)
-    use_sources = ordered(use.source, source_order)
-    columns = ordered(list(use.source) + list(made.source), source_order)  # Table 1 columns
+    # Names that report zero for the whole period are left out of the summary views below; the
+    # end-use detail tables still list them, as reported in the file.
+    used = use[use.energy != 0]
+    produced = made[made.energy != 0]
+    end_uses = ordered(used.top_level, end_use_order)
+    use_sources = ordered(used.source, source_order)
+    columns = ordered(list(used.source) + list(produced.source), source_order)  # Table 1 columns
     colors = {
         "end_uses": assign_colors(end_uses, END_USE_COLORS, set(use.loc[use.is_custom & (use.level == 0), "name"])),
         "sources": assign_colors(columns, SOURCE_COLORS, set(e.loc[e.source_is_custom, "source"])),
@@ -247,12 +261,12 @@ def summarize(metadata: dict, entries: pd.DataFrame, values: pd.DataFrame, perio
     }
 
     # Table 1: top-level end use x energy source. Blank (NaN) where a source doesn't serve that end use.
-    by_end_use = use.pivot_table(index="top_level", columns="source", values="energy", aggfunc="sum")
+    by_end_use = used.pivot_table(index="top_level", columns="source", values="energy", aggfunc="sum")
     by_end_use = by_end_use.reindex(index=end_uses, columns=columns)
     by_end_use["Total"] = by_end_use.sum(axis=1)
     by_end_use["Share"] = by_end_use["Total"] / consumption
-    source_consumption = use.groupby("source").energy.sum().reindex(columns)
-    source_production = -made.groupby("source").energy.sum().reindex(columns)
+    source_consumption = used.groupby("source").energy.sum().reindex(columns)
+    source_production = -produced.groupby("source").energy.sum().reindex(columns)
     source_net = source_consumption.fillna(0) + source_production.fillna(0)
 
     checks = run_checks(e)
@@ -282,10 +296,10 @@ def summarize(metadata: dict, entries: pd.DataFrame, values: pd.DataFrame, perio
     one_year = months.year.nunique() == 1
     labels = [p.strftime("%b" if one_year else "%b %Y") for p in monthly.index]
 
-    monthly_end_use = monthly_by(use, "top_level").reindex(columns=end_uses, fill_value=0.0)
+    monthly_end_use = monthly_by(used, "top_level").reindex(columns=end_uses, fill_value=0.0)
     monthly_end_use["Total"] = monthly_end_use.sum(axis=1)
 
-    monthly_source = monthly_by(use, "source").reindex(columns=use_sources, fill_value=0.0)
+    monthly_source = monthly_by(used, "source").reindex(columns=use_sources, fill_value=0.0)
     monthly_source["Building consumption"] = monthly_source.sum(axis=1)
     if len(made):
         monthly_source["On-site production"] = -monthly[made.index[made.reported.notna()]].sum(axis=1)
@@ -296,7 +310,7 @@ def summarize(metadata: dict, entries: pd.DataFrame, values: pd.DataFrame, perio
 
     # Regulated vs unregulated, by top-level end use. The flag applies only to the entry it is set on.
     regulation = (
-        use.pivot_table(index="top_level", columns="is_unregulated", values="energy", aggfunc="sum")
+        used.pivot_table(index="top_level", columns="is_unregulated", values="energy", aggfunc="sum")
         .reindex(index=end_uses, columns=[False, True])
         .fillna(0.0)
     )
@@ -308,6 +322,8 @@ def summarize(metadata: dict, entries: pd.DataFrame, values: pd.DataFrame, perio
         "metadata": metadata,
         "units": units,
         "unit_system": UNIT_SYSTEMS[units],
+        "report_name": REPORT_NAME,
+        "report_version": REPORT_VERSION,
         "period": period,
         "checks": checks,
         "totals": {
@@ -450,7 +466,7 @@ def main(argv=None):
         summary = summarize(*load(args.input), units=args.units)
     except UnsupportedFile as error:
         sys.exit(f"Error: {args.input.name} is not supported by this report: {error}")
-    except Exception as error:
+    except (OSError, json.JSONDecodeError, KeyError, TypeError) as error:
         sys.exit(
             f"Error: could not read {args.input.name} ({type(error).__name__}: {error}).\n"
             "Check that the file is valid against the Building Performance Output Report schema."
