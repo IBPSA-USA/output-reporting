@@ -1,0 +1,420 @@
+{
+  "metadata": {
+    "schema_author": "IBPSA-USA Building Data Exchange Committee",
+    "schema_name": "Building Performance Output Report",
+    "schema_version": "0.1.0",
+    "author": "BDE Project Team",
+    "id": "bd1a841a-3ab9-4bc2-b38e-15f1279d2bdb",
+    "description": "Courthouse Demo Model -- ASHRAE 90.1 Performance Rating Method Proposed design. Monthly totals of the hourly IES-VE ApacheHVAC results in courthouse_proposed.json (calendar year 2021).",
+    "time_of_creation": "2026-09-17T12:00Z",
+    "version": "1.0.0"
+  },
+  "time_intervals": [
+    {
+      "id": "Monthly",
+      "starting_time": "2021-01-01T00:00Z",
+      "timestamps": [
+        "2021-02-01T00:00Z",
+        "2021-03-01T00:00Z",
+        "2021-04-01T00:00Z",
+        "2021-05-01T00:00Z",
+        "2021-06-01T00:00Z",
+        "2021-07-01T00:00Z",
+        "2021-08-01T00:00Z",
+        "2021-09-01T00:00Z",
+        "2021-10-01T00:00Z",
+        "2021-11-01T00:00Z",
+        "2021-12-01T00:00Z",
+        "2022-01-01T00:00Z"
+      ]
+    }
+  ],
+  "energy_sources": [
+    {
+      "name": "Electricity",
+      "direction": "IMPORTED",
+      "end_uses": [
+        {
+          "name": "Lighting",
+          "subcategories": [
+            {
+              "name": "Interior Lighting",
+              "consumption": {
+                "name": "Lighting | Interior Lighting",
+                "units": "kWh",
+                "time_series_type": "SUM",
+                "value_time_intervals": "Monthly",
+                "values": [
+                  9740.671,
+                  9187.117,
+                  10495.002,
+                  10019.779,
+                  9552.836,
+                  9960.224,
+                  9856.093,
+                  10148.605,
+                  9811.248,
+                  9754.983,
+                  9782.253,
+                  10741.085
+                ]
+              }
+            },
+            {
+              "name": "Exterior Lighting",
+              "consumption": {
+                "name": "Lighting | Exterior Lighting",
+                "units": "kWh",
+                "time_series_type": "SUM",
+                "value_time_intervals": "Monthly",
+                "values": [
+                  2606.753,
+                  2158.056,
+                  2110.338,
+                  1806.333,
+                  1765.542,
+                  1629.317,
+                  1692.427,
+                  1806.333,
+                  1902.537,
+                  2199.616,
+                  2410.496,
+                  2725.277
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Space Heating",
+          "consumption": {
+            "name": "Space Heating",
+            "units": "kWh",
+            "time_series_type": "SUM",
+            "value_time_intervals": "Monthly",
+            "values": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          }
+        },
+        {
+          "name": "Space Cooling",
+          "consumption": {
+            "name": "Space Cooling",
+            "units": "kWh",
+            "time_series_type": "SUM",
+            "value_time_intervals": "Monthly",
+            "values": [
+              2658.095,
+              3319.637,
+              5499.046,
+              7515.61,
+              10139.167,
+              16627.098,
+              19794.501,
+              21461.327,
+              14895.8,
+              8858.422,
+              4054.936,
+              2440.476
+            ]
+          },
+          "subcategories": [
+            {
+              "name": "Heat Rejection",
+              "consumption": {
+                "name": "Space Cooling | Heat Rejection",
+                "units": "kWh",
+                "time_series_type": "SUM",
+                "value_time_intervals": "Monthly",
+                "values": [
+                  169.666,
+                  211.892,
+                  351.003,
+                  479.72,
+                  647.181,
+                  1061.304,
+                  1263.479,
+                  1369.872,
+                  950.796,
+                  565.431,
+                  258.826,
+                  155.775
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Pumps",
+          "consumption": {
+            "name": "Pumps",
+            "units": "kWh",
+            "time_series_type": "SUM",
+            "value_time_intervals": "Monthly",
+            "values": [
+              72.2,
+              58.259,
+              53.25,
+              38.224,
+              16.737,
+              10.755,
+              7.2,
+              7.444,
+              12.051,
+              25.22,
+              45.455,
+              86.694
+            ]
+          }
+        },
+        {
+          "name": "Water Heating",
+          "consumption": {
+            "name": "Water Heating",
+            "units": "kWh",
+            "time_series_type": "SUM",
+            "value_time_intervals": "Monthly",
+            "values": [
+              950.238,
+              925.824,
+              1097.272,
+              1039.761,
+              963.404,
+              1014.401,
+              962.449,
+              983.67,
+              942.079,
+              915.828,
+              919.586,
+              1034.769
+            ]
+          }
+        },
+        {
+          "name": "Miscellaneous",
+          "is_unregulated": true,
+          "consumption": {
+            "name": "Miscellaneous",
+            "units": "kWh",
+            "time_series_type": "SUM",
+            "value_time_intervals": "Monthly",
+            "values": [
+              19840.649,
+              19015.503,
+              22231.81,
+              21365.239,
+              20457.243,
+              21365.239,
+              21073.837,
+              21615.216,
+              20748.645,
+              20457.243,
+              20132.05,
+              21615.216
+            ]
+          },
+          "subcategories": [
+            {
+              "name": "Elevators and Escalators",
+              "is_unregulated": true,
+              "consumption": {
+                "name": "Miscellaneous | Elevators and Escalators",
+                "units": "kWh",
+                "time_series_type": "SUM",
+                "value_time_intervals": "Monthly",
+                "values": [
+                  1694.93,
+                  1672.281,
+                  2005.267,
+                  1922.02,
+                  1778.176,
+                  1922.02,
+                  1861.423,
+                  1922.02,
+                  1838.774,
+                  1778.176,
+                  1755.527,
+                  1922.02
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Fans",
+          "subcategories": [
+            {
+              "name": "Interior Central Fans",
+              "is_custom": true,
+              "consumption": {
+                "name": "Fans | Interior Central Fans",
+                "units": "kWh",
+                "time_series_type": "SUM",
+                "value_time_intervals": "Monthly",
+                "values": [
+                  4520.189,
+                  4210.157,
+                  4970.964,
+                  5099.947,
+                  5404.165,
+                  6807.685,
+                  6949.821,
+                  7724.187,
+                  6393.966,
+                  4888.615,
+                  4494.419,
+                  4835.959
+                ]
+              }
+            },
+            {
+              "name": "Interior Local Fans",
+              "is_custom": true,
+              "consumption": {
+                "name": "Fans | Interior Local Fans",
+                "units": "kWh",
+                "time_series_type": "SUM",
+                "value_time_intervals": "Monthly",
+                "values": [
+                  313.884,
+                  317.792,
+                  383.355,
+                  367.56,
+                  361.623,
+                  388.502,
+                  378.26,
+                  395.194,
+                  375.768,
+                  349.718,
+                  345.859,
+                  365.781
+                ]
+              }
+            },
+            {
+              "name": "Exhaust Fans",
+              "is_custom": true,
+              "consumption": {
+                "name": "Fans | Exhaust Fans",
+                "units": "kWh",
+                "time_series_type": "SUM",
+                "value_time_intervals": "Monthly",
+                "values": [
+                  626.915,
+                  616.254,
+                  735.705,
+                  704.954,
+                  654.112,
+                  704.954,
+                  681.31,
+                  708.507,
+                  677.756,
+                  654.112,
+                  650.559,
+                  708.507
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Natural Gas",
+      "direction": "IMPORTED",
+      "end_uses": [
+        {
+          "name": "Space Heating",
+          "consumption": {
+            "name": "Space Heating",
+            "units": "kWh",
+            "time_series_type": "SUM",
+            "value_time_intervals": "Monthly",
+            "values": [
+              39404.024,
+              31762.168,
+              29072.433,
+              20856.694,
+              9175.211,
+              5892.019,
+              3943.4,
+              4086.568,
+              6599.531,
+              13751.331,
+              24783.887,
+              47342.041
+            ]
+          }
+        },
+        {
+          "name": "Water Heating",
+          "consumption": {
+            "name": "Water Heating",
+            "units": "kWh",
+            "time_series_type": "SUM",
+            "value_time_intervals": "Monthly",
+            "values": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Electricity",
+      "direction": "ON_SITE_PRODUCTION",
+      "end_uses": [
+        {
+          "name": "Photovoltaic Generation",
+          "is_custom": true,
+          "notes": [
+            "Reported by the source tool as grid-displaced electricity (a negative offset); sign-normalized here to a positive production magnitude, consistent with this document's ON_SITE_PRODUCTION direction."
+          ],
+          "consumption": {
+            "name": "Photovoltaic Generation",
+            "units": "kWh",
+            "time_series_type": "SUM",
+            "value_time_intervals": "Monthly",
+            "values": [
+              22483.033,
+              31944.761,
+              49471.939,
+              67728.613,
+              77362.822,
+              80476.382,
+              84428.38,
+              76777.693,
+              61255.089,
+              42696.384,
+              25962.973,
+              18538.08
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

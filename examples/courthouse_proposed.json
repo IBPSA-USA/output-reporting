@@ -3,7 +3,7 @@
     "schema_author": "IBPSA-USA Building Data Exchange Committee",
     "schema_name": "Building Performance Output Report",
     "schema_version": "0.1.0",
-    "author": "Big Ladder Software",
+    "author": "BDE Project Team",
     "id": "f5d21be4-4509-4745-b99b-d75bdd6fd299",
     "description": "Courthouse Demo Model -- ASHRAE 90.1 Performance Rating Method Proposed design. Hourly IES-VE ApacheHVAC simulation results for calendar year 2021, converted from source kBtu (IP) to kWh (SI).",
     "time_of_creation": "2026-09-03T12:00Z",
