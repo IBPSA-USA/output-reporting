@@ -12,8 +12,6 @@ report = ["jinja2", "matplotlib", "pandas", "pyyaml"]
 
 [tool.uv]
 default-groups = ["dev", "report"]
-
-[tool.uv]
 package = false
 
 [tool.uv.sources]
