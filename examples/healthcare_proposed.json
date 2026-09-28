@@ -1,0 +1,265 @@
+{
+  "metadata": {
+    "schema_author": "IBPSA-USA Building Data Exchange Committee",
+    "schema_name": "Building Performance Output Report",
+    "schema_version": "0.1.0",
+    "author": "NeuMod Labs",
+    "id": "9074ed93-22cc-48e7-a6f6-870e7a67c608",
+    "description": "Healthcare EnergyPlus project output mapped to the Building Performance Output Report data model. Monthly site-energy end-use results are taken directly from the EnergyPlus monthly end-use reports.",
+    "time_of_creation": "2026-09-13T15:25Z",
+    "source": "EnergyPlus 9.5.0-de239b2e5f; Building: part-I; Run Period: RUN PERIOD 01; Weather: OLYMPIA-AP - USA Custom-727920 WMO#=727920; 8760 simulated hours; source file: cem 20240425Table(1).html.",
+    "disclaimer": "The source monthly report identifies January through December but does not expose an explicit simulation calendar year. A nominal non-leap reference year (2001) is used only for BPOR timestamp encoding; it does not assert a 2001 simulation year.",
+    "notes": "All serialized energy is site energy in kWh. Native monthly EnergyPlus electricity kWh values are retained exactly as reported. Monthly natural-gas therm values are converted to kWh using the EnergyPlus documented gas-meter conversion factor. The EnergyPlus annual IP kBtu tables are retained only as audit references because their IP-unit conversion basis is not numerically identical to the native monthly meter conversions. Water, source energy, recovered thermal energy, and non-energy performance metrics are outside BPOR scope."
+  },
+  "time_intervals": [
+    {
+      "id": "Monthly",
+      "starting_time": "2001-01-01T00:00Z",
+      "timestamps": [
+        "2001-02-01T00:00Z",
+        "2001-03-01T00:00Z",
+        "2001-04-01T00:00Z",
+        "2001-05-01T00:00Z",
+        "2001-06-01T00:00Z",
+        "2001-07-01T00:00Z",
+        "2001-08-01T00:00Z",
+        "2001-09-01T00:00Z",
+        "2001-10-01T00:00Z",
+        "2001-11-01T00:00Z",
+        "2001-12-01T00:00Z",
+        "2002-01-01T00:00Z"
+      ],
+      "labels": [
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December"
+      ]
+    }
+  ],
+  "energy_sources": [
+    {
+      "name": "Electricity",
+      "direction": "IMPORTED",
+      "end_uses": [
+        {
+          "name": "Lighting",
+          "subcategories": [
+            {
+              "name": "Interior Lighting",
+              "consumption": {
+                "name": "Lighting | Interior Lighting",
+                "units": "kWh",
+                "time_series_type": "SUM",
+                "value_time_intervals": "Monthly",
+                "values": [
+                  203262.9,
+                  183634.51,
+                  203590.04,
+                  196283.91,
+                  203590.04,
+                  196938.19,
+                  202935.76,
+                  203590.04,
+                  196611.05,
+                  203262.9,
+                  196938.19,
+                  202935.76
+                ]
+              }
+            },
+            {
+              "name": "Exterior Lighting",
+              "consumption": {
+                "name": "Lighting | Exterior Lighting",
+                "units": "kWh",
+                "time_series_type": "SUM",
+                "value_time_intervals": "Monthly",
+                "values": [
+                  2015.0,
+                  1820.0,
+                  2015.0,
+                  1950.0,
+                  2015.0,
+                  1950.0,
+                  2015.0,
+                  2015.0,
+                  1950.0,
+                  2015.0,
+                  1950.0,
+                  2015.0
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Space Cooling",
+          "consumption": {
+            "name": "Space Cooling",
+            "units": "kWh",
+            "time_series_type": "SUM",
+            "value_time_intervals": "Monthly",
+            "values": [
+              166628.82,
+              149176.96,
+              170527.12,
+              170681.88,
+              197651.74,
+              264427.65,
+              384611.37,
+              390630.39,
+              287875.46,
+              222566.79,
+              163444.97,
+              165693.48
+            ]
+          },
+          "subcategories": [
+            {
+              "name": "Heat Rejection",
+              "consumption": {
+                "name": "Space Cooling | Heat Rejection",
+                "units": "kWh",
+                "time_series_type": "SUM",
+                "value_time_intervals": "Monthly",
+                "values": [
+                  0.62,
+                  0.54,
+                  3.12,
+                  3.23,
+                  15.48,
+                  279.78,
+                  3509.67,
+                  2279.47,
+                  237.74,
+                  53.87,
+                  0.85,
+                  0.06
+                ]
+              }
+            }
+          ],
+          "notes": [
+            "Space Cooling maps the EnergyPlus COOLING:ELECTRICITY meter. Heat Rejection maps the separate HEATREJECTION:ELECTRICITY meter and is reported as its canonical subcategory."
+          ]
+        },
+        {
+          "name": "Miscellaneous",
+          "consumption": {
+            "name": "Miscellaneous",
+            "units": "kWh",
+            "time_series_type": "SUM",
+            "value_time_intervals": "Monthly",
+            "values": [
+              623823.51,
+              563715.55,
+              625397.47,
+              601843.14,
+              625396.32,
+              604836.06,
+              622403.4,
+              625396.32,
+              603414.8,
+              623824.66,
+              604836.06,
+              622403.4
+            ]
+          },
+          "notes": [
+            "Maps the EnergyPlus INTERIOREQUIPMENT:ELECTRICITY monthly meter. The annual EnergyPlus subcategory table further identifies General, Elevator, and Kitchen components, but the source file does not provide their monthly time series; monthly splits are therefore not synthesized."
+          ]
+        },
+        {
+          "name": "Fans",
+          "consumption": {
+            "name": "Fans",
+            "units": "kWh",
+            "time_series_type": "SUM",
+            "value_time_intervals": "Monthly",
+            "values": [
+              416568.07,
+              376128.87,
+              410450.43,
+              396115.11,
+              406792.69,
+              396749.8,
+              422676.64,
+              428839.75,
+              405226.2,
+              416149.58,
+              412269.04,
+              422000.81
+            ]
+          },
+          "notes": [
+            "Maps the flat EnergyPlus FANS:ELECTRICITY monthly end-use meter. The source monthly report does not allocate fan electricity between heating and cooling."
+          ]
+        },
+        {
+          "name": "Pumps",
+          "consumption": {
+            "name": "Pumps",
+            "units": "kWh",
+            "time_series_type": "SUM",
+            "value_time_intervals": "Monthly",
+            "values": [
+              161134.35,
+              147559.29,
+              157634.24,
+              152719.24,
+              148688.89,
+              140005.44,
+              163487.28,
+              163264.78,
+              142935.67,
+              150938.99,
+              159288.49,
+              165782.46
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Natural Gas",
+      "direction": "IMPORTED",
+      "end_uses": [
+        {
+          "name": "Space Heating",
+          "consumption": {
+            "name": "Space Heating",
+            "units": "kWh",
+            "time_series_type": "SUM",
+            "value_time_intervals": "Monthly",
+            "values": [
+              2349369.652425963,
+              2219798.243122869,
+              2129402.229924786,
+              1982966.045883056,
+              1965289.171208705,
+              1812053.738336732,
+              1831261.616282169,
+              1908986.115615027,
+              1805168.619682901,
+              1932647.794615343,
+              2429177.593997364,
+              2635235.570432499
+            ]
+          },
+          "notes": [
+            "Maps HEATING:NATURALGAS. Source therm values are converted using 1 therm = 29.307107026910185 kWh, derived from the EnergyPlus documented gas-meter factor 9.4781712E-09 therm/J."
+          ]
+        }
+      ]
+    }
+  ]
+}

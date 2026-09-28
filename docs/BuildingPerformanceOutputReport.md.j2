@@ -25,6 +25,10 @@ See [GitHub releases](https://github.com/IBPSA-USA/output-reporting/releases) fo
 
 The data model's core use is a software-to-software pipeline: a building performance simulation tool exports a `BuildingPerformanceOutputReport`-conformant file, and a downstream application -- most notably an AHJ's code-compliance review software -- ingests it to perform automated QA/QC and compliance checks, without manual re-entry or bespoke per-tool parsing.
 
+![The Building Performance Output Report schema as a many-to-many exchange layer between simulation software and AHJ compliance/certification review software.](assets/bde_schema_relationship.png)
+
+This pipeline is a parallel, optional path alongside existing building performance modeling (BPM) reporting and AHJ review processes, not a replacement for either: a single simulation tool's output can be reviewed against multiple AHJs' requirements, and a single AHJ's review software can ingest conformant output from multiple simulation tools, without requiring either side to standardize on the other.
+
 ### Assembling a Custom Report from Multiple Software Tools
 
 A secondary use case merges output from more than one simulation tool into a single conformant file, when a sophisticated model (e.g., a complex mixed-use building or design-assist study) isn't produced by one engine end to end, and a separate `TimeIntervals` entry is needed per native timestep where the merged tools disagree on granularity (see Publishing Rules for the `is_custom` mechanism used to absorb tool-specific breakdowns).
