@@ -5,7 +5,6 @@ from pathlib import Path
 import pytest
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
-import publish  # noqa: E402
 import report  # noqa: E402
 
 EXAMPLES = report.REPO_DIR / "examples"
@@ -70,14 +69,6 @@ def test_recommended_colors_cover_canonical_names():
     sources, end_uses = report.canonical_order()
     assert set(report.END_USE_COLORS) == set(end_uses)
     assert set(report.SOURCE_COLORS) == set(sources)
-
-
-def test_publish_builds_reports_and_index(tmp_path):
-    written = publish.build(tmp_path)
-    assert {p.name for p in written} == {f"{p.stem}.html" for p in REPORTABLE} | {"index.html"}
-    index = (tmp_path / "index.html").read_text(encoding="utf-8")
-    for path in REPORTABLE:
-        assert f'href="{path.stem}.html"' in index
 
 
 def test_report_version_is_stamped():
