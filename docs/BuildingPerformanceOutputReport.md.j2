@@ -67,6 +67,12 @@ This document does not cover:
 
 A conformant `BuildingPerformanceOutputReport` document is a single object with three top-level members: `metadata` (the Standard 232 common `Metadata` data group, constrained to `schema_name = "Building Performance Output Report"`), `time_intervals` (one or more `TimeIntervals` data groups, each identified by an `id` that `TimeSeries` elsewhere in the document reference), and `energy_sources` (one or more `EnergySource` entries -- the actual reported results).
 
+The diagram below traces which Data Group each member of a conformant document references, stopping wherever a Data Group repeats within its own chain of references (e.g., `EndUse`, which nests within itself through `subcategories` -- see below).
+
+{{ add_schema_diagram('BuildingPerformanceOutputReport') }}
+
+An asterisk (\*) marks a reference that is not required to be present.
+
 `EnergySource` names the energy carrier delivered to or from the site -- despite the similar name, it is unrelated to "source energy" (primary energy) in the site-vs-source sense described in Scope, which this data model does not report; an `EnergySource` entry reports *what* carrier was delivered, always in site-energy terms, never *where upstream* it originated.
 
 Each `EnergySource` (e.g., electricity, natural gas) carries a `direction` (`IMPORTED`, `EXPORTED`, or `ON_SITE_PRODUCTION`) and an array of `EndUse` entries describing what consumed, produced, or exported that energy. `EndUse` is recursive: any entry may carry `subcategories`, an array of further `EndUse` entries, to any depth, alongside its own `consumption` (a `TimeSeries` whose `time_series_type` is constrained to `SUM`, referencing one of the document's `TimeIntervals` by `id`). An `EndUse` may carry `consumption`, `subcategories`, or both. An `EndUse`'s `consumption` reports only energy not reported by any of its `subcategories`; it never includes its subcategories' consumption.
@@ -87,9 +93,15 @@ An `EnergySource.name` should be one of the canonical sources below unless `is_c
 
 An `EndUse.name` should be one of the canonical categories below unless `is_custom` is set to `true`. These categories and their nesting are also captured in machine-readable form as the `Canonical End Uses` custom attribute on `EnergySource.end_uses`, in the Data Groups tables below.
 
+The `consumption`/`subcategories` rule above applies to each canonical category below: a category's own `consumption` covers energy not attributed to any of its subcategories, and the category's total is the sum of the two (see Application Rules).
+
+The figure below shows the full canonical end-use category hierarchy at a glance, before each category is described individually.
+
+<iframe src="../../assets/end_use_structure.html" style="width: 100%; height: 720px; border: none;"></iframe>
+
 #### Lighting
 
-Energy used by luminaires. Always reported through one of its two subcategories, never as a bare `Lighting` value with its own consumption.
+Energy used by luminaires.
 
 - **Interior Lighting** -- Energy used by luminaires within enclosed spaces for the purpose of illuminance, covering task and process lighting, dwelling- and common-area lighting, plug-in and hardwired fixtures, all lamp types, exit and emergency lighting, and decorative, public-area, and health/safety lighting.
 - **Exterior Lighting** -- Energy used by luminaires that illuminate the building facade, entrances, walkways, parking lots, and landscaping.

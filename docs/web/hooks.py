@@ -5,10 +5,14 @@ from pathlib import Path
 
 from mkdocs.structure.files import File
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import structure_diagram  # noqa: E402
+
 sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "report" / "src"))
 import report  # noqa: E402
 
-EXAMPLES_DIR = Path(__file__).resolve().parents[2] / "examples"
+REPO_ROOT = Path(__file__).resolve().parents[2]
+EXAMPLES_DIR = REPO_ROOT / "examples"
 
 
 def _supported_examples():
@@ -56,5 +60,11 @@ def on_files(files, config, **kwargs):  # pylint: disable=unused-argument
             f'<iframe src="../../{report_uri}" style="width: 100%; height: 85vh; border: none;"></iframe>\n'
         )
         files.append(File.generated(config, f"examples/{stem}.md", content=wrapper))
+
+    files.append(
+        File.generated(
+            config, "assets/end_use_structure.html", content=structure_diagram.build_end_uses(REPO_ROOT)
+        )
+    )
 
     return files
