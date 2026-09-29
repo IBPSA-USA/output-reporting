@@ -8,7 +8,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 import report  # noqa: E402
 
 EXAMPLES = report.REPO_DIR / "examples"
-REPORTABLE = sorted(p for p in EXAMPLES.glob("*.json") if p.name != "example.json")
+REPORTABLE = sorted(EXAMPLES.glob("*.json"))
 
 
 @pytest.mark.parametrize("path", REPORTABLE, ids=lambda p: p.stem)
@@ -55,9 +55,33 @@ def test_annual_file_skips_monthly_section(tmp_path):
     assert "Monthly Energy" not in report.render(summary, path.name)
 
 
-def test_short_period_is_rejected():
+def test_short_period_is_rejected(tmp_path):
+    doc = {
+        "metadata": {"description": "short period"},
+        "time_intervals": [{"id": "Hourly", "starting_time": "2026-01-01T00:00Z", "regular_interval": 3600.0}],
+        "energy_sources": [
+            {
+                "name": "Electricity",
+                "direction": "IMPORTED",
+                "end_uses": [
+                    {
+                        "name": "Ventilation",
+                        "consumption": {
+                            "name": "Ventilation",
+                            "units": "kWh",
+                            "time_series_type": "SUM",
+                            "value_time_intervals": "Hourly",
+                            "values": [0.0, 1234.0, 8.0],
+                        },
+                    }
+                ],
+            }
+        ],
+    }
+    path = tmp_path / "short_period.json"
+    path.write_text(json.dumps(doc), encoding="utf-8")
     with pytest.raises(report.UnsupportedFile):
-        report.load(EXAMPLES / "example.json")
+        report.load(path)
 
 
 def test_zero_consumption_is_flagged():
