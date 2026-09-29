@@ -2,8 +2,8 @@ title: "Building Performance Output Report Data Model"
 author: "IBPSA-USA"
 description: "A standardized modern data model for characterizing building performance output reports"
 colors:
-  primary: grey
-  accent: red
+  primary: "#e0e0e0"
+  accent: "#d91c2e"
 banner: >
   **Work in progress:** This specification is under active development through a
   multi-stakeholder consensus process and may change before it is finalized.
