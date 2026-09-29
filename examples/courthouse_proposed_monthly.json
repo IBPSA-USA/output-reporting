@@ -36,7 +36,7 @@
       "end_uses": [
         {
           "name": "Lighting",
-          "subcategories": [
+          "children": [
             {
               "name": "Interior Lighting",
               "consumption": {
@@ -130,7 +130,7 @@
               2440.476
             ]
           },
-          "subcategories": [
+          "children": [
             {
               "name": "Heat Rejection",
               "consumption": {
@@ -225,7 +225,7 @@
               21615.216
             ]
           },
-          "subcategories": [
+          "children": [
             {
               "name": "Elevators and Escalators",
               "is_unregulated": true,
@@ -254,7 +254,7 @@
         },
         {
           "name": "Fans",
-          "subcategories": [
+          "children": [
             {
               "name": "Interior Central Fans",
               "is_custom": true,

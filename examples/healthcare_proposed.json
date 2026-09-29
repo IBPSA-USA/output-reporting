@@ -52,7 +52,7 @@
       "end_uses": [
         {
           "name": "Lighting",
-          "subcategories": [
+          "children": [
             {
               "name": "Interior Lighting",
               "consumption": {
@@ -123,7 +123,7 @@
               165693.48
             ]
           },
-          "subcategories": [
+          "children": [
             {
               "name": "Heat Rejection",
               "consumption": {
@@ -149,7 +149,7 @@
             }
           ],
           "notes": [
-            "Space Cooling maps the EnergyPlus COOLING:ELECTRICITY meter. Heat Rejection maps the separate HEATREJECTION:ELECTRICITY meter and is reported as its canonical subcategory."
+            "Space Cooling maps the EnergyPlus COOLING:ELECTRICITY meter. Heat Rejection maps the separate HEATREJECTION:ELECTRICITY meter and is reported as its canonical child entry."
           ]
         },
         {

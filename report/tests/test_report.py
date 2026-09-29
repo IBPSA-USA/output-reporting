@@ -42,7 +42,7 @@ def test_annual_file_skips_monthly_section(tmp_path):
             if "consumption" in end_use:
                 end_use["consumption"]["values"] = [sum(end_use["consumption"]["values"])]
                 end_use["consumption"]["value_time_intervals"] = "Annual"
-            to_annual(end_use.get("subcategories", []))
+            to_annual(end_use.get("children", []))
 
     for source in doc["energy_sources"]:
         to_annual(source["end_uses"])

@@ -68,7 +68,7 @@ def build_end_uses(repo: Path) -> str:
     html += row("", node("Canonical End Uses", classes="root"))
     for i, category in enumerate(end_uses):
         name = category["name"]
-        subs = [s["name"] for s in category.get("subcategories", [])]
+        subs = [s["name"] for s in category.get("children", [])]
         last = i == len(end_uses) - 1
         color = END_USE_COLORS.get(name, FALLBACK_COLOR)
         html += row("└─ " if last else "├─ ", node(name, color, "parent"))

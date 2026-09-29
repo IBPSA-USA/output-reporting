@@ -94,7 +94,7 @@ def load(path: Path) -> tuple[dict, pd.DataFrame, pd.DataFrame, dict]:
     """
     Returns
       metadata: the file's metadata group
-      entries:  one row per end use or subcategory, in file order. The row index is the entry id.
+      entries:  one row per end use, at any nesting depth, in file order. The row index is the entry id.
       values:   interval energy (kWh). Rows are interval start times; columns are entry ids.
       period:   start, end, resolution, and whether the file is a single annual interval
     """
@@ -111,11 +111,11 @@ def load(path: Path) -> tuple[dict, pd.DataFrame, pd.DataFrame, dict]:
                     "source": source["name"],
                     "direction": source["direction"],
                     "source_is_custom": source.get("is_custom", False),
-                    "level": level,  # 0 = top-level end use, 1 = subcategory, 2 = sub-subcategory, ...
+                    "level": level,  # 0 = top-level end use, 1 = child, 2 = grandchild, ...
                     "name": end_use["name"],
                     "path": path,
                     "top_level": path.split(" | ")[0],
-                    "has_subcategories": "subcategories" in end_use,
+                    "has_children": "children" in end_use,
                     "is_custom": end_use.get("is_custom", False),
                     "is_unregulated": end_use.get("is_unregulated", False),
                     "notes": " ".join(end_use.get("notes", [])),
@@ -124,7 +124,7 @@ def load(path: Path) -> tuple[dict, pd.DataFrame, pd.DataFrame, dict]:
             )
             if "consumption" in end_use:
                 series[entry_id] = end_use["consumption"]
-            add(end_use.get("subcategories", []), source_id, source, level + 1, path)
+            add(end_use.get("children", []), source_id, source, level + 1, path)
 
     for source_id, source in enumerate(raw["energy_sources"]):
         add(source["end_uses"], source_id, source)
@@ -230,12 +230,12 @@ def summarize(metadata: dict, entries: pd.DataFrame, values: pd.DataFrame, perio
     e = entries.copy()
 
     # Annual energy per entry. "reported" is what the file reports on the entry itself (never including
-    # subcategories); "rollup" adds all subcategories below it and is only set on entries that have them.
+    # children); "rollup" adds all children below it and is only set on entries that have them.
     e["reported"] = values.sum() * UNITS[units]  # aligned on entry id; NaN where the entry has no series
     e["energy"] = e["reported"].fillna(0.0)
     e["rollup"] = [
         e.loc[(e.source_id == row.source_id) & (e.path + " | ").str.startswith(row.path + " | "), "energy"].sum()
-        if row.has_subcategories else float("nan")
+        if row.has_children else float("nan")
         for row in e.itertuples()
     ]
 

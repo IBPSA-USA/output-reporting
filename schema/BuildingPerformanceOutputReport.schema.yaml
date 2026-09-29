@@ -113,18 +113,18 @@ CanonicalCategory:
   Object Type: "Data Group"
   Data Elements:
     name:
-      Description: "Name of this canonical category or subcategory"
+      Description: "Name of this canonical category"
       Type: String
       Required: True
-    subcategories:
-      Description: "Canonical subcategories nested under this category"
+    children:
+      Description: "Canonical categories nested under this one"
       Type: "Array(Group(CanonicalCategory))"
 
 EndUse:
   Object Type: "Data Group"
   Data Elements:
     name:
-      Description: "Name of this end use or end-use subcategory"
+      Description: "Name of this end use"
       Type: String
       Required: True
       Notes:
@@ -139,20 +139,20 @@ EndUse:
       Type: Boolean
       Notes:
         - "Defaults to false when absent."
-        - "Applies only to this end use's own `consumption`; not inherited by `subcategories`."
-    subcategories:
+        - "Applies only to this end use's own `consumption`; not inherited by `children`."
+    children:
       Description: "Further breakdown of this end use's energy consumption"
       Type: "Array(Group(EndUse))"
       Constraints:
         - "[1..]"
       Notes: "Recursive; supports any number of nesting levels."
     consumption:
-      Description: "Energy consumption for this end use or subcategory"
+      Description: "Energy consumption for this end use"
       Type: "Group(TimeSeries)"
       Constraints:
         - time_series_type=SUM
         - units="kWh"
-      Notes: "Excludes energy reported by `subcategories`."
+      Notes: "Excludes energy reported by `children`."
       Nested Attribute Overrides:
         Units:
           path: values
@@ -190,20 +190,20 @@ EnergySource:
       Required: True
       Canonical End Uses:
         - name: "Lighting"
-          subcategories:
+          children:
             - name: "Interior Lighting"
             - name: "Exterior Lighting"
         - name: "Space Heating"
-          subcategories:
+          children:
             - name: "Heat Pump Supplementary"
             - name: "Fans"
         - name: "Space Cooling"
-          subcategories:
+          children:
             - name: "Heat Rejection"
             - name: "Fans"
         - name: "Water Heating"
         - name: "Miscellaneous"
-          subcategories:
+          children:
             - name: "Cooking"
             - name: "Refrigeration"
             - name: "Elevators and Escalators"

@@ -178,7 +178,7 @@
 </table>
 
 <h2><span class="num">2</span>Energy by Source and End Use</h2>
-<p class="section-note">Annual energy by top-level end use. Each end use includes the energy of all its subcategories.</p>
+<p class="section-note">Annual energy by top-level end use. Each end use includes the energy of all its children.</p>
 <figure class="chart">
   {{ charts.end_uses | safe }}
   <figcaption><strong>Figure 1.</strong> Annual building consumption by end use, all energy sources ({{ u }}).</figcaption>
@@ -222,7 +222,7 @@
 </div>
 
 <h2><span class="num">3</span>End-Use Detail</h2>
-<p class="section-note">Every end use and subcategory as reported in the file. <em>Reported</em> is the energy reported directly on that entry. <em>Roll-up</em> is shown for entries with subcategories and adds the energy of all their subcategories to the entry’s reported energy. A reported value never includes subcategory energy, so the <em>Reported</em> column sums to the source total. <em>Share</em> uses the roll-up where shown, otherwise the reported value.</p>
+<p class="section-note">Every end use and child entry as reported in the file. <em>Reported</em> is the energy reported directly on that entry. <em>Roll-up</em> is shown for entries with children and adds the energy of all their children to the entry’s reported energy. A reported value never includes its children’s energy, so the <em>Reported</em> column sums to the source total. <em>Share</em> uses the roll-up where shown, otherwise the reported value.</p>
 {% for source in s.details %}
 <div class="table-wrap">
 <table>
@@ -332,7 +332,7 @@
 <ol class="conventions">
   <li>All values are site energy, as reported in the results file.{% if u != "kWh" %} Values were converted from kWh at 1 kWh = 3.412 kBtu.{% endif %}</li>
   <li>The report takes the building’s utility-meter perspective: imported energy is building consumption, and on-site production is shown as negative where it is combined with building consumption (net site energy rows, columns, and charts). Where production is shown on its own, it is positive. Net site energy = building consumption − on-site production.{% if t.has_export %} Exported energy is part of on-site production and is not subtracted again.{% endif %}</li>
-  <li>An end use’s reported energy excludes its subcategories. Roll-ups and end-use totals add the entry’s reported energy and that of all its subcategories.</li>
+  <li>An end use’s reported energy excludes its children. Roll-ups and end-use totals add the entry’s reported energy and that of all its children.</li>
   <li>Canonical end uses and energy sources use recommended colors (warm for heating, blue for cooling, gold for lighting, green for on-site production) that are the same in every report. Custom names are gray.</li>
   <li>End uses and energy sources that report zero for the whole period are left out of the summary sections; the end-use detail tables list them as reported in the file.</li>
   <li>Totals are computed before rounding, so displayed values may differ from the sum of displayed parts by 1.</li>

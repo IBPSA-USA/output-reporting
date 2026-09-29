@@ -5,7 +5,7 @@
     "schema_version": "0.1.0",
     "author": "BDE Project Team",
     "id": "16ff24ab-675f-4b93-824b-fcda050c8380",
-    "description": "Synthetic stress-test model with invented data, created by Greg Collins to exercise reporting features the simulation examples don't cover: custom energy sources and end uses, nested subcategories, several on-site production types, and exported energy. Hourly results for July 2024 through June 2025.",
+    "description": "Synthetic stress-test model with invented data, created by Greg Collins to exercise reporting features the simulation examples don't cover: custom energy sources and end uses, nested child end uses, several on-site production types, and exported energy. Hourly results for July 2024 through June 2025.",
     "time_of_creation": "2026-09-17T12:00Z",
     "version": "1.0.0"
   },
@@ -23,7 +23,7 @@
       "end_uses": [
         {
           "name": "Lighting",
-          "subcategories": [
+          "children": [
             {
               "name": "Interior Lighting",
               "consumption": {
@@ -26340,12 +26340,12 @@
               20.0
             ]
           },
-          "subcategories": [
+          "children": [
             {
               "name": "Servers",
               "is_custom": true,
               "is_unregulated": true,
-              "subcategories": [
+              "children": [
                 {
                   "name": "Rack A",
                   "is_custom": true,

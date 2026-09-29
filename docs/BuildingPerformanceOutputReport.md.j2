@@ -67,7 +67,7 @@ This document does not cover:
 
 A conformant BuildingPerformanceOutputReport document is a single object with three top-level members: `metadata` (the Standard 232 common `Metadata` data group, constrained to `schema_name = "Building Performance Output Report"`), `time_intervals` (one or more TimeIntervals data groups, each identified by an `id` that TimeSeries elsewhere in the document reference), and `energy_sources` (one or more EnergySource entries -- the actual reported results).
 
-The diagram below traces which Data Group each member of a conformant document references, stopping wherever a Data Group repeats within its own chain of references (e.g., EndUse, which nests within itself through `subcategories` -- see below).
+The diagram below traces which Data Group each member of a conformant document references, stopping wherever a Data Group repeats within its own chain of references (e.g., EndUse, which nests within itself through `children` -- see below).
 
 {{ add_schema_diagram('BuildingPerformanceOutputReport') }}
 
@@ -75,7 +75,7 @@ An asterisk (\*) marks a reference that is not required to be present.
 
 EnergySource names the energy carrier delivered to or from the site -- despite the similar name, it is unrelated to "source energy" (primary energy) in the site-vs-source sense described in Scope, which this data model does not report; an EnergySource entry reports *what* carrier was delivered, always in site-energy terms, never *where upstream* it originated.
 
-Each EnergySource (e.g., electricity, natural gas) carries a `direction` (`IMPORTED`, `EXPORTED`, or `ON_SITE_PRODUCTION`) and an array of EndUse entries describing what consumed, produced, or exported that energy. EndUse is recursive: any entry may carry `subcategories`, an array of further EndUse entries, to any depth, alongside its own `consumption` (a TimeSeries whose `time_series_type` is constrained to `SUM`, referencing one of the document's TimeIntervals by `id`). An EndUse may carry `consumption`, `subcategories`, or both. An EndUse's `consumption` reports only energy not reported by any of its `subcategories`; it never includes its subcategories' consumption.
+Each EnergySource (e.g., electricity, natural gas) carries a `direction` (`IMPORTED`, `EXPORTED`, or `ON_SITE_PRODUCTION`) and an array of EndUse entries describing what consumed, produced, or exported that energy. EndUse is recursive: any entry may carry `children`, an array of further EndUse entries, to any depth, alongside its own `consumption` (a TimeSeries whose `time_series_type` is constrained to `SUM`, referencing one of the document's TimeIntervals by `id`). An EndUse may carry `consumption`, `children`, or both. An EndUse's `consumption` reports only energy not reported by any of its `children`; it never includes its children's consumption.
 
 ### Canonical Energy Sources
 
@@ -93,7 +93,7 @@ An `EnergySource.name` should be one of the canonical sources below unless `is_c
 
 An `EndUse.name` should be one of the canonical categories below unless `is_custom` is set to `true`. These categories and their nesting are also captured in machine-readable form as the `Canonical End Uses` custom attribute on `EnergySource.end_uses`, in the Data Groups tables below.
 
-The `consumption`/`subcategories` rule above applies to each canonical category below: a category's own `consumption` covers energy not attributed to any of its subcategories, and the category's total is the sum of the two (see Application Rules).
+The `consumption`/`children` rule above applies to each canonical category below: a category's own `consumption` covers energy not attributed to any of its children, and the category's total is the sum of the two (see Application Rules).
 
 The figure below shows the full canonical end-use category hierarchy at a glance, before each category is described individually.
 
@@ -136,7 +136,7 @@ Energy used by general equipment plugged into standard electrical outlets, as we
 
 Electrical energy used by motors driving air-moving devices within the HVAC system (e.g., supply, return, and relief fans), as well as process or dedicated exhaust fans (e.g., kitchen hoods, garage, or laboratory exhaust), for the purpose of circulating or exhausting air.
 
-Fan energy may be reported either as this flat top-level category or nested as a subcategory under Space Heating or Space Cooling, when attributing fan energy to the system it serves is preferred -- both forms are illustrated in the `Canonical End Uses` custom attribute below. Both are valid; see Publishing Rules and Application Rules for the convention that governs how publishers should document, and applications should interpret, which slice of the building's fan energy a given `Fans` entry covers.
+Fan energy may be reported either as this flat top-level category or nested as a child under Space Heating or Space Cooling, when attributing fan energy to the system it serves is preferred -- both forms are illustrated in the `Canonical End Uses` custom attribute below. Both are valid; see Publishing Rules and Application Rules for the convention that governs how publishers should document, and applications should interpret, which slice of the building's fan energy a given `Fans` entry covers.
 
 #### Humidification
 
@@ -153,23 +153,23 @@ Electrical energy used by motors driving fluid-moving devices within the HVAC or
 The following rules are in addition to the value ranges and enumerations already enforced through each data element's `Constraints` attribute in the Data Model above.
 
 - The number of values in a `TimeSeries.values` array shall equal the number of intervals defined by the TimeIntervals data group referenced by that time series' `value_time_intervals` (i.e., the length of `timestamps` if given, or the number of regular intervals implied by `regular_interval` and the series' starting and ending times).
-- Unless `EndUse.is_custom` is `true`, `EndUse.name` shall match one of the canonical end-use category or subcategory names given in the Data Model above, at a nesting position consistent with that category's documented parent (e.g., `Heat Pump Supplementary` only within a `Space Heating` entry's `subcategories`).
+- Unless `EndUse.is_custom` is `true`, `EndUse.name` shall match one of the canonical end-use category names given in the Data Model above, at a nesting position consistent with that category's documented parent (e.g., `Heat Pump Supplementary` only within a `Space Heating` entry's `children`).
 - Unless `EnergySource.is_custom` is `true`, `EnergySource.name` shall match one of the canonical energy source names given in the Data Model above.
-- Within a single `end_uses` or `subcategories` array, `EndUse.name` values shall be unique; two sibling entries under the same parent shall not share a name (e.g., two flat `Fans` entries under the same EnergySource). See Publishing Rules for how to structure multiple instances of the same category instead.
+- Within a single `end_uses` or `children` array, `EndUse.name` values shall be unique; two sibling entries under the same parent shall not share a name (e.g., two flat `Fans` entries under the same EnergySource). See Publishing Rules for how to structure multiple instances of the same category instead.
 
 ## Publishing Rules
 
 - Use one of the canonical end-use category names given in the Data Model above for `EndUse.name` whenever a reported end use corresponds to one of those categories; set `is_custom` to `true` and choose a descriptive `name` for any end use outside that list (e.g., a tool-specific process load).
-- When a single energy source's results include more than one instance of the same end-use category (e.g., separate fan systems serving different zones, or multiple water heaters), nest them as distinctly-named, `is_custom` subcategories under one top-level entry for that category, rather than repeating the category name as sibling entries; sibling `EndUse.name` values must be unique (see Verification Rules).
-- When reporting `Fans` energy -- whether as the flat top-level category, nested under `Space Heating` or `Space Cooling`, or as multiple named subcategories under a single top-level `Fans` entry (see above) -- use `notes` to describe what slice of the building's fan energy a flat or canonically-named entry covers, when its name alone can't say so (e.g., "general exhaust and ventilation fans not attributed to a specific system"). Because placement is a modeling judgment call and the schema does not verify non-overlap, this is the only way a reader can determine whether two `Fans` entries in the same document double-count the same energy.
+- When a single energy source's results include more than one instance of the same end-use category (e.g., separate fan systems serving different zones, or multiple water heaters), nest them as distinctly-named, `is_custom` child entries under one top-level entry for that category, rather than repeating the category name as sibling entries; sibling `EndUse.name` values must be unique (see Verification Rules).
+- When reporting `Fans` energy -- whether as the flat top-level category, nested under `Space Heating` or `Space Cooling`, or as multiple named child entries under a single top-level `Fans` entry (see above) -- use `notes` to describe what slice of the building's fan energy a flat or canonically-named entry covers, when its name alone can't say so (e.g., "general exhaust and ventilation fans not attributed to a specific system"). Because placement is a modeling judgment call and the schema does not verify non-overlap, this is the only way a reader can determine whether two `Fans` entries in the same document double-count the same energy.
 - When assembling a single document from the output of more than one building performance simulation tool, normalize each tool's results onto a common TimeIntervals entry where their native timesteps agree, or publish a separate TimeIntervals entry per native timestep and reference the correct one from each TimeSeries. Use `is_custom` end uses for breakdowns specific to a single tool that do not map onto the canonical categories.
 - Use one of the canonical energy source names given in the Data Model above for `EnergySource.name` whenever a reported energy source corresponds to one of those names; set `is_custom` to `true` and choose a descriptive `name` for any energy source outside that list (e.g., a tool-specific fuel type). Use `direction` to distinguish imported, exported, and on-site-produced energy rather than encoding that distinction into the name (e.g., on-site photovoltaic generation is `Electricity` with `direction = ON_SITE_PRODUCTION`, not a separate name).
-- Set `TimeSeries.name` (e.g., on `EndUse.consumption`) to the full ancestor path to that time series, joined by `" | "` (e.g., `Space Cooling | Heat Rejection`, or `Fans | Interior Central Fans` for an `is_custom` subcategory), so the name identifies the time series' full scope on its own, without requiring the reader to reconstruct its position in the document.
+- Set `TimeSeries.name` (e.g., on `EndUse.consumption`) to the full ancestor path to that time series, joined by `" | "` (e.g., `Space Cooling | Heat Rejection`, or `Fans | Interior Central Fans` for an `is_custom` child entry), so the name identifies the time series' full scope on its own, without requiring the reader to reconstruct its position in the document.
 
 ## Application Rules
 
 - Do not assume that two EndUse entries in the same document -- e.g., a flat `Fans` entry and a `Fans` entry nested under `Space Heating` -- report non-overlapping energy. Read each entry's `notes` (see Publishing Rules) to determine what it covers before aggregating `consumption` values across a document.
 - Treat an absent `is_custom` or `is_unregulated` value as `false`, consistent with each data element's documented default.
 - Applications performing code-compliance review should treat EndUse entries with `is_unregulated` set to `true` as outside the scope of code-mandated efficiency or power allowance checks.
-- To total an EndUse, sum its own `consumption` (if any) and the `consumption` of all its descendant subcategories. Treat `is_unregulated` as applying only to the EndUse it is set on, not to its subcategories.
+- To total an EndUse, sum its own `consumption` (if any) and the `consumption` of all its descendant children. Treat `is_unregulated` as applying only to the EndUse it is set on, not to its children.
 - Resolve a `TimeSeries.value_time_intervals` reference against the `id` of an entry in the `time_intervals` array of the enclosing BuildingPerformanceOutputReport document.
