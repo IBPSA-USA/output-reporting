@@ -29,7 +29,7 @@ jobs:
         with:
           python-version: "3.13"
       - name: Build web docs
-        run: uv run doit generate_web_docs
+        run: uv run doit generate_web_docs publish_example_reports
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:

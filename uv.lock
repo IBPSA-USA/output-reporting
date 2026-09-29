@@ -747,7 +747,7 @@ wheels = [
 [[package]]
 name = "lattice"
 version = "0.0.0"
-source = { git = "https://github.com/bigladder/lattice.git?branch=updates-for-output-reporting#75e2464ca57aebdd048eec10c50e84dc75f2b894" }
+source = { git = "https://github.com/bigladder/lattice.git?branch=updates-for-output-reporting#06a17b498bca03ae2fa1ca05a724f812f2bdbfda" }
 dependencies = [
     { name = "atheneum-forge" },
     { name = "casefy" },
@@ -785,8 +785,8 @@ wheels = [
 
 [[package]]
 name = "markdown-grid-tables"
-version = "0.6.1.dev4+g193493127"
-source = { git = "https://github.com/bigladder/markdown-grid-tables.git?branch=fix-def-list-and-preprocessing#193493127920b02c0715e5eca16c260d580bc8c6" }
+version = "0.6.1.dev5+g293fb54e9"
+source = { git = "https://github.com/bigladder/markdown-grid-tables.git?branch=fix-def-list-and-preprocessing#293fb54e97ac024f541a97cd9f70fb7e377cd7e7" }
 dependencies = [
     { name = "markdown" },
 ]
