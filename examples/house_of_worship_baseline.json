@@ -1,0 +1,302 @@
+{
+  "metadata": {
+    "schema_author": "IBPSA-USA Building Data Exchange Committee",
+    "schema_name": "Building Performance Output Report",
+    "schema_version": "0.1.0",
+    "author": "NeuMod Labs",
+    "id": "115f77b4-258b-4d6b-9f08-6cb13efb2c01",
+    "description": "House of Worship Baseline design. Monthly eQUEST/DOE-2.2 site-energy end-use results mapped to the Building Performance Output Report data model.",
+    "time_of_creation": "2026-09-30T19:16Z",
+    "version": "1.0.0",
+    "source": "eQUEST/DOE-2.2-47h2 SIM output; source file: house_of_worship_baseline.SIM; weather file: CHICAGO OHARE INT IL.",
+    "disclaimer": "The eQUEST SIM report identifies January through December but does not establish an explicit simulation calendar year. A nominal non-leap reference year (2001) is used only to encode BPOR monthly interval timestamps; it is not an assertion that the simulation represents 2001.",
+    "notes": "PS-E monthly electric end-use values are serialized directly in their native kWh. PS-F monthly natural-gas values are reported in therms and converted to kWh using the DOE-2 LV-M conversion convention printed in the source SIM: 1 Btu = 0.293000 Wh, therefore 1 therm = 29.3 kWh. Monthly PS-E/PS-F values are printed as whole units; they are preserved exactly rather than adjusted to force agreement with separately rounded annual BEPU totals."
+  },
+  "time_intervals": [
+    {
+      "id": "Monthly",
+      "starting_time": "2001-01-01T00:00Z",
+      "timestamps": [
+        "2001-02-01T00:00Z",
+        "2001-03-01T00:00Z",
+        "2001-04-01T00:00Z",
+        "2001-05-01T00:00Z",
+        "2001-06-01T00:00Z",
+        "2001-07-01T00:00Z",
+        "2001-08-01T00:00Z",
+        "2001-09-01T00:00Z",
+        "2001-10-01T00:00Z",
+        "2001-11-01T00:00Z",
+        "2001-12-01T00:00Z",
+        "2002-01-01T00:00Z"
+      ],
+      "labels": [
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December"
+      ]
+    }
+  ],
+  "energy_sources": [
+    {
+      "name": "Electricity",
+      "direction": "IMPORTED",
+      "end_uses": [
+        {
+          "name": "Lighting",
+          "subcategories": [
+            {
+              "name": "Interior Lighting",
+              "consumption": {
+                "name": "Lighting | Interior Lighting",
+                "units": "kWh",
+                "time_series_type": "SUM",
+                "value_time_intervals": "Monthly",
+                "values": [
+                  18501.0,
+                  16406.0,
+                  18289.0,
+                  17769.0,
+                  18501.0,
+                  17769.0,
+                  18228.0,
+                  18564.0,
+                  17449.0,
+                  18501.0,
+                  17451.0,
+                  18290.0
+                ]
+              },
+              "notes": [
+                "Mapped directly from eQUEST/DOE-2 PS-E LIGHTS."
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Space Cooling",
+          "consumption": {
+            "name": "Space Cooling",
+            "units": "kWh",
+            "time_series_type": "SUM",
+            "value_time_intervals": "Monthly",
+            "values": [
+              4244.0,
+              3783.0,
+              4033.0,
+              6086.0,
+              7130.0,
+              14506.0,
+              24201.0,
+              17678.0,
+              9716.0,
+              3990.0,
+              3801.0,
+              4250.0
+            ]
+          },
+          "subcategories": [
+            {
+              "name": "Heat Rejection",
+              "consumption": {
+                "name": "Space Cooling | Heat Rejection",
+                "units": "kWh",
+                "time_series_type": "SUM",
+                "value_time_intervals": "Monthly",
+                "values": [
+                  0.0,
+                  0.0,
+                  10.0,
+                  574.0,
+                  831.0,
+                  2764.0,
+                  5662.0,
+                  3735.0,
+                  1521.0,
+                  145.0,
+                  91.0,
+                  0.0
+                ]
+              },
+              "notes": [
+                "Mapped directly from eQUEST/DOE-2 PS-E HEAT REJECT."
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Miscellaneous",
+          "consumption": {
+            "name": "Miscellaneous",
+            "units": "kWh",
+            "time_series_type": "SUM",
+            "value_time_intervals": "Monthly",
+            "values": [
+              3506.0,
+              3120.0,
+              3482.0,
+              3381.0,
+              3506.0,
+              3381.0,
+              3431.0,
+              3558.0,
+              3324.0,
+              3506.0,
+              3325.0,
+              3483.0
+            ]
+          },
+          "notes": [
+            "Mapped directly from eQUEST/DOE-2 PS-E MISC EQUIP. No narrower canonical subcategory is asserted because the SIM report does not provide one."
+          ]
+        },
+        {
+          "name": "Pumps & Aux",
+          "consumption": {
+            "name": "Pumps & Aux",
+            "units": "kWh",
+            "time_series_type": "SUM",
+            "value_time_intervals": "Monthly",
+            "values": [
+              43064.0,
+              38214.0,
+              38748.0,
+              31776.0,
+              22485.0,
+              26325.0,
+              32875.0,
+              28388.0,
+              21850.0,
+              27605.0,
+              32943.0,
+              43239.0
+            ]
+          },
+          "notes": [
+            "Mapped directly from eQUEST/DOE-2 PS-E PUMPS & AUX. This is intentionally custom rather than canonical BPOR Pumps because DOE-2's source category includes circulation pumps plus auxiliary power consumed by multiple component types."
+          ],
+          "is_custom": true
+        },
+        {
+          "name": "Fans",
+          "consumption": {
+            "name": "Fans",
+            "units": "kWh",
+            "time_series_type": "SUM",
+            "value_time_intervals": "Monthly",
+            "values": [
+              14544.0,
+              12626.0,
+              12131.0,
+              9203.0,
+              6750.0,
+              7524.0,
+              8919.0,
+              7720.0,
+              6545.0,
+              7988.0,
+              10589.0,
+              14489.0
+            ]
+          },
+          "notes": [
+            "Mapped from eQUEST/DOE-2 PS-E VENT FANS. Reported as the flat BPOR Fans end use because the SIM file does not allocate this fan energy between heating and cooling end uses."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Natural Gas",
+      "direction": "IMPORTED",
+      "end_uses": [
+        {
+          "name": "Miscellaneous",
+          "consumption": {
+            "name": "Miscellaneous",
+            "units": "kWh",
+            "time_series_type": "SUM",
+            "value_time_intervals": "Monthly",
+            "values": [
+              234.4,
+              205.1,
+              234.4,
+              205.1,
+              234.4,
+              205.1,
+              234.4,
+              234.4,
+              205.1,
+              234.4,
+              205.1,
+              234.4
+            ]
+          },
+          "notes": [
+            "Mapped from eQUEST/DOE-2 PS-F MISC EQUIP. Source therm values converted using the SIM-file LV-M convention: 1 therm = 29.3 kWh."
+          ]
+        },
+        {
+          "name": "Space Heating",
+          "consumption": {
+            "name": "Space Heating",
+            "units": "kWh",
+            "time_series_type": "SUM",
+            "value_time_intervals": "Monthly",
+            "values": [
+              187051.2,
+              149605.8,
+              109904.3,
+              65251.1,
+              22414.5,
+              8848.6,
+              5801.4,
+              6504.6,
+              12188.8,
+              43891.4,
+              101758.9,
+              179403.9
+            ]
+          },
+          "notes": [
+            "Mapped from eQUEST/DOE-2 PS-F SPACE HEATING. Source therm values converted using the SIM-file LV-M convention: 1 therm = 29.3 kWh."
+          ]
+        },
+        {
+          "name": "Water Heating",
+          "consumption": {
+            "name": "Water Heating",
+            "units": "kWh",
+            "time_series_type": "SUM",
+            "value_time_intervals": "Monthly",
+            "values": [
+              1406.4,
+              1289.2,
+              1435.7,
+              1377.1,
+              1318.5,
+              1172.0,
+              1113.4,
+              1084.1,
+              1025.5,
+              1113.4,
+              1142.7,
+              1289.2
+            ]
+          },
+          "notes": [
+            "Mapped from eQUEST/DOE-2 PS-F DOMEST HOT WTR. Source therm values converted using the SIM-file LV-M convention: 1 therm = 29.3 kWh."
+          ]
+        }
+      ]
+    }
+  ]
+}
