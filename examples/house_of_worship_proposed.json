@@ -53,7 +53,7 @@
       "end_uses": [
         {
           "name": "Lighting",
-          "subcategories": [
+          "children": [
             {
               "name": "Interior Lighting",
               "consumption": {
@@ -104,7 +104,7 @@
               3922.0
             ]
           },
-          "subcategories": [
+          "children": [
             {
               "name": "Heat Rejection",
               "consumption": {
