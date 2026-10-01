@@ -1,6 +1,6 @@
 # Example Energy Performance Report (draft)
 
-Example report **v0.1.0** (`REPORT_VERSION` in `src/report.py`, stamped in the report footer). The version describes this report, not the schema.
+Report template **v0.1.0** (`REPORT_TEMPLATE_VERSION` in `src/report.py`, stamped in the report footer). The version describes this report template, not the schema or the results file.
 
 Generates a static HTML report from a single Building Performance Output Report JSON file: summary figures, energy by source and end use, end-use detail, monthly energy, regulated vs. unregulated energy, and a few data checks.
 

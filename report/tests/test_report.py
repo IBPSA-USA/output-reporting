@@ -95,7 +95,7 @@ def test_recommended_colors_cover_canonical_names():
     assert set(report.SOURCE_COLORS) == set(sources)
 
 
-def test_report_version_is_stamped():
+def test_report_template_version_is_stamped():
     path = EXAMPLES / "courthouse_proposed.json"
     html = report.render(report.summarize(*report.load(path)), path.name)
-    assert f"Example Report v{report.REPORT_VERSION}" in html
+    assert f"report template v{report.REPORT_TEMPLATE_VERSION}" in html

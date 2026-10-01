@@ -1,12 +1,12 @@
 """
-Building Performance Output Report - Example Report (v0.1.0)
+Building Performance Output Report - Example Report
 
 Generates a static HTML report from a Building Performance Output Report JSON file.
 
-Versioning (REPORT_VERSION below) is semantic and describes this report, not the schema: the patch
-number changes for fixes, the minor number when the report gains or rearranges content, and the major
-number when its structure changes in a way that would break a reader's expectations. The version is
-stamped in the report footer.
+Versioning (REPORT_TEMPLATE_VERSION below) is semantic and describes this report template, not the
+schema or the results file: the patch number changes for fixes, the minor number when the report
+gains or rearranges content, and the major number when its structure changes in a way that would
+break a reader's expectations. The version is stamped in the report footer.
 
 Usage:
     uv run python report/src/report.py [input.json] [--units kBtu] [-o out.html]
@@ -38,8 +38,7 @@ SCHEMA_PATH = REPO_DIR / "schema" / "BuildingPerformanceOutputReport.schema.yaml
 DEFAULT_INPUT = REPO_DIR / "examples" / "courthouse_proposed.json"
 DEFAULT_OUTPUT_DIR = REPORT_DIR / "output"
 
-REPORT_NAME = "Building Performance Output Report"
-REPORT_VERSION = "0.1.0"
+REPORT_TEMPLATE_VERSION = "0.1.0"
 
 UNITS = {"kWh": 1.0, "kBtu": 3.412141633}  # conversion factors from kWh
 UNIT_SYSTEMS = {"kWh": "SI", "kBtu": "IP"}
@@ -322,8 +321,7 @@ def summarize(metadata: dict, entries: pd.DataFrame, values: pd.DataFrame, perio
         "metadata": metadata,
         "units": units,
         "unit_system": UNIT_SYSTEMS[units],
-        "report_name": REPORT_NAME,
-        "report_version": REPORT_VERSION,
+        "report_template_version": REPORT_TEMPLATE_VERSION,
         "period": period,
         "checks": checks,
         "totals": {

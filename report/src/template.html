@@ -134,13 +134,13 @@
   <h1>Example Energy Performance Report</h1>
   <dl class="meta">
     <dt>Results file</dt><dd class="mono">{{ file_name }}</dd>
-    {% if m.description %}<dt>Description</dt><dd>{{ m.description }}</dd>{% endif %}
+    {% if m.description %}<dt>Results file description</dt><dd>{{ m.description }}</dd>{% endif %}
     <dt>Reporting period</dt><dd>{{ s.period.start | date }} – {{ s.period.end | date }} · {{ s.period.resolution }}</dd>
     <dt>Unit system</dt><dd>{{ s.unit_system }} · energy in {{ u }} (site energy)</dd>
-    <dt>File author</dt><dd>{{ m.author or "—" }}</dd>
-    <dt>File created</dt><dd>{{ m.time_of_creation or "—" }} · version {{ m.version or "—" }}</dd>
-    <dt>Schema</dt><dd>{{ m.schema_name }} {{ m.schema_version }}</dd>
-    <dt>File ID</dt><dd class="mono">{{ m.id or "—" }}</dd>
+    <dt>Results file author</dt><dd>{{ m.author or "—" }}</dd>
+    <dt>Results file created</dt><dd>{{ m.time_of_creation or "—" }} · version {{ m.version or "—" }}</dd>
+    <dt>Results file schema</dt><dd>{{ m.schema_name }} {{ m.schema_version }}</dd>
+    <dt>Results file ID</dt><dd class="mono">{{ m.id or "—" }}</dd>
   </dl>
 </header>
 
@@ -345,8 +345,7 @@
 </ol>
 
 <footer>
-  <span>Generated {{ generated.strftime("%Y-%m-%d %H:%M %Z") }} from <span class="mono">{{ file_name }}</span></span>
-  <span>{{ s.report_name }} · Example Report v{{ s.report_version }}</span>
+  <span>Report generated {{ generated.strftime("%Y-%m-%d %H:%M %Z") }} from <span class="mono">{{ file_name }}</span> using report template v{{ s.report_template_version }}</span>
 </footer>
 </main>
 <script>if (location.hash === "#print") window.print();</script>
