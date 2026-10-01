@@ -115,6 +115,11 @@
     .page { margin: 0; padding: 0; border: 0; box-shadow: none; max-width: none; }
     h2 { break-after: avoid; }
     figure.chart, table { break-inside: avoid; }
+    .table-wrap { overflow: visible; }
+    table { font-size: 10px; }
+    th, td { padding: 4px 5px; }
+    thead th.n { white-space: normal; overflow-wrap: break-word; }
+    td.month { white-space: nowrap; }
   }
 </style>
 </head>
@@ -263,7 +268,7 @@
   </tr></thead>
   <tbody>
     {% for month, row in s.monthly_end_use.iterrows() %}
-    <tr><td>{{ month }}</td>{% for value in row %}<td class="n">{{ value | fmt }}</td>{% endfor %}</tr>
+    <tr><td class="month">{{ month }}</td>{% for value in row %}<td class="n">{{ value | fmt }}</td>{% endfor %}</tr>
     {% endfor %}
     <tr class="total"><td>Total</td>{% for value in s.monthly_end_use.sum() %}<td class="n">{{ value | fmt }}</td>{% endfor %}</tr>
   </tbody>
@@ -282,7 +287,7 @@
   </tr></thead>
   <tbody>
     {% for month, row in s.monthly_source.iterrows() %}
-    <tr><td>{{ month }}</td>{% for value in row %}<td class="n">{{ value | fmt }}</td>{% endfor %}</tr>
+    <tr><td class="month">{{ month }}</td>{% for value in row %}<td class="n">{{ value | fmt }}</td>{% endfor %}</tr>
     {% endfor %}
     <tr class="total"><td>Total</td>{% for value in s.monthly_source.sum() %}<td class="n">{{ value | fmt }}</td>{% endfor %}</tr>
   </tbody>
@@ -344,5 +349,6 @@
   <span>{{ s.report_name }} · Example Report v{{ s.report_version }}</span>
 </footer>
 </main>
+<script>if (location.hash === "#print") window.print();</script>
 </body>
 </html>
