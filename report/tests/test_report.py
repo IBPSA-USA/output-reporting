@@ -14,7 +14,7 @@ REPORTABLE = sorted(EXAMPLES.glob("*.json"))
 @pytest.mark.parametrize("path", REPORTABLE, ids=lambda p: p.stem)
 def test_example_renders(path):
     html = report.render(report.summarize(*report.load(path)), path.name)
-    assert "Energy Performance Report" in html
+    assert "Example Energy Performance Report" in html
 
 
 def test_courthouse_totals():

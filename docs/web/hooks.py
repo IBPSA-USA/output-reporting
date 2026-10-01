@@ -13,6 +13,13 @@ import report  # noqa: E402
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 EXAMPLES_DIR = REPO_ROOT / "examples"
+EXAMPLES_PAGE_URI = "examples/examples.md"
+
+EXAMPLE_REPORT_NOTE = (
+    "This is an example report, generated from the example file by a draft tool in this repository. "
+    "It illustrates one way a conforming file can be presented. The specification does not define "
+    "a report format, and the report's layout and contents are not part of the specification."
+)
 
 
 def _supported_examples():
@@ -25,7 +32,7 @@ def _supported_examples():
 
 
 def lattice_example_columns(example_path, content):  # pylint: disable=unused-argument
-    """Adds a "Report" column to lattice's generated Examples table.
+    """Adds an "Example Report" column to lattice's generated Examples table.
 
     Links to the example's report page (added to docs_dir by `on_files`, below), for examples
     the report tool supports. Written as a plain sibling reference - `{stem}.md`, next to
@@ -36,7 +43,7 @@ def lattice_example_columns(example_path, content):  # pylint: disable=unused-ar
         report.load(example_path)
     except report.UnsupportedFile:
         return {}
-    return {"Report": f"[View Report]({example_path.stem}.md){{: .md-button .md-button--small }}"}
+    return {"Example Report": f"[View Example Report]({example_path.stem}.md){{: .md-button .md-button--small }}"}
 
 
 def on_files(files, config, **kwargs):  # pylint: disable=unused-argument
@@ -55,8 +62,9 @@ def on_files(files, config, **kwargs):  # pylint: disable=unused-argument
         files.append(File.generated(config, report_uri, content=html))
 
         wrapper = (
-            f"# {stem}\n\n"
+            f"# Example Report: {stem}\n\n"
             "[← Back to examples](examples.md)\n\n"
+            f"{EXAMPLE_REPORT_NOTE}\n\n"
             f"[Print to PDF](../../{report_uri}#print){{: .md-button .md-button--small target=_blank }}\n\n"
             f'<iframe src="../../{report_uri}" style="width: 100%; height: 85vh; border: none;"></iframe>\n'
         )
@@ -69,3 +77,22 @@ def on_files(files, config, **kwargs):  # pylint: disable=unused-argument
     )
 
     return files
+
+
+def on_page_markdown(markdown, page, **kwargs):  # pylint: disable=unused-argument
+    """Adds an introduction below the heading of lattice's generated Examples page.
+
+    lattice writes that page's heading and table itself, with no option for introductory text, so
+    the introduction is inserted after its first line here.
+    """
+    if page.file.src_uri != EXAMPLES_PAGE_URI:
+        return markdown
+    heading, _, rest = markdown.partition("\n")
+    introduction = (
+        "Each file below conforms to the schema and can be downloaded as YAML, JSON, or CBOR. "
+        "Where available, the **View Example Report** button opens an example report generated "
+        "from that file. The example reports illustrate one way a conforming file can be "
+        "presented. The specification does not define a report format, and the reports' layout "
+        "and contents are not part of the specification."
+    )
+    return f"{heading}\n\n{introduction}\n{rest}"
