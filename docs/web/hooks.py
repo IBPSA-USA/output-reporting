@@ -57,7 +57,7 @@ def on_files(files, config, **kwargs):  # pylint: disable=unused-argument
         wrapper = (
             f"# {stem}\n\n"
             "[← Back to examples](examples.md)\n\n"
-            f"[Print to PDF](../../{report_uri}#print){{: .md-button target=_blank }}\n\n"
+            f"[Print to PDF](../../{report_uri}#print){{: .md-button .md-button--small target=_blank }}\n\n"
             f'<iframe src="../../{report_uri}" style="width: 100%; height: 85vh; border: none;"></iframe>\n'
         )
         files.append(File.generated(config, f"examples/{stem}.md", content=wrapper))
