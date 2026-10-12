@@ -15,4 +15,4 @@ default-groups = ["dev", "report"]
 package = false
 
 [tool.uv.sources]
-lattice = { git = "https://github.com/bigladder/lattice.git", branch = "updates-for-output-reporting" }
+lattice = { git = "https://github.com/bigladder/lattice.git", branch = "main" }
